@@ -144,40 +144,6 @@ void Mode1Player::BuildLabyrinth() {
 		//this->Own.alter(finish, 'F');
 		this->Own.setFinish(finish);
 
-		/*RowColumn[0] = ' '; RowColumn[1] = ' ';
-		RowColumn2[0] = ' '; RowColumn2[1] = ' ';
-		for (int i = 1; i <= 20 && (RowColumn[0] != '-' && RowColumn[1] != '1'); ++i) {
-			system("cls");
-			this->Own.printLabyrinth(this->Name, SHOW_WALLS);
-			cout << endl << "Build your labyrinth:" << endl;
-			while ((RowColumn[0] < 'a' || RowColumn[0] > 'f') || (RowColumn[1] < '1' || RowColumn[1] > '6')) {
-				cout << "Add wall(" << i << "/20) between: ";
-				scanf_s("%2s", RowColumn, 3);
-				while ((c = fgetc(stdin)) != '\n' && c != EOF);
-				if (RowColumn[0] == '-' && RowColumn[1] == '1') return;
-			}
-			while ((RowColumn2[0] < 'a' || RowColumn2[0] > 'f') || (RowColumn2[1] < '1' || RowColumn2[1] > '6')) {
-				cout << "                    and: ";
-				scanf_s("%2s", RowColumn2, 3);
-				while ((c = fgetc(stdin)) != '\n' && c != EOF);
-			}
-
-			start = pair<int, int>(RowColumn[0] - 'a', RowColumn[1] - '1');
-			finish = pair<int, int>(RowColumn2[0] - 'a', RowColumn2[1] - '1');
-			//cout << start.first << start.second << endl;
-			//cout << finish.first << finish.second << endl;
-			//cin.get();
-			if (abs((c = start.first - finish.first)) == 1) {
-				this->Own.alter(start, (c == 1 ? 1 : 3));
-			}
-			else if (abs((c = start.second - finish.second)) == 1) {
-				this->Own.alter(start, (c == 1 ? 4 : 2));
-			}
-			RowColumn[0] = ' '; RowColumn[1] = ' ';
-			RowColumn2[0] = ' '; RowColumn2[1] = ' ';
-		}
-		*/
-
 		RowColumn[0] = ' '; RowColumn[1] = ' ';
 		for (int i = 1; i <= 20 && (RowColumn[0] != '-' && RowColumn[1] != '1'); ++i) {
 			system("cls");
