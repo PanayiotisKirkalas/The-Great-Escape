@@ -118,7 +118,6 @@ int Player::getID() const {
 
 void Mode1Player::BuildLabyrinth() {
 	char RowColumn[3] = { ' ', ' '}, dir;
-	//char RowColumn2[3] = { ' ', ' ' };
 	int c;
 	coordinate start, finish;
 
@@ -139,9 +138,7 @@ void Mode1Player::BuildLabyrinth() {
 		}
 		finish = pair<int, int>(RowColumn[0] - 'a', RowColumn[1] - '1');
 
-		//this->Own.alter(start, 'S');
 		this->Own.setStart(start);
-		//this->Own.alter(finish, 'F');
 		this->Own.setFinish(finish);
 
 		RowColumn[0] = ' '; RowColumn[1] = ' ';
@@ -191,8 +188,6 @@ void Mode1Player::BuildLabyrinth() {
 		this->Own = Labyrinth();
 		RowColumn[0] = ' ';
 		RowColumn[1] = ' ';
-		//RowColumn2[0] = ' ';
-		//RowColumn2[1] = ' ';
 		c = 0;
 		start = coordinate();
 		finish = coordinate();
@@ -208,15 +203,7 @@ bool Mode1Player::Move(Labyrinth& Other) {
 
 	c = _getch();
 
-	//if (c && c != 224) {
-	//	cout << "[DEBUG]" << "exiting" << endl;
-	//	cin.get();
-	//	return false;
-	//}
-
 	while (!Other.isClosed(this->pos, c)) {
-		//cout << "[DEBUG]" << c << endl;
-		//cin.get();
 		switch (c)
 		{
 		case KEY_UP:
@@ -224,8 +211,6 @@ bool Mode1Player::Move(Labyrinth& Other) {
 				Other.alter(this->pos, PLAYER_UP);
 				this->pos.first -= 1;
 			}
-			//cout << "[DEBUG]" << this->pos.first << endl;
-			//cin.get();
 			break;
 		case KEY_DOWN:
 			if (this->pos.first < 5) {
@@ -238,8 +223,6 @@ bool Mode1Player::Move(Labyrinth& Other) {
 				Other.alter(this->pos, PLAYER_LEFT);
 				this->pos.second -= 1;
 			}
-			//cout << "[DEBUG]" << this->pos.second << endl;
-			//cin.get();
 			break;
 		case KEY_RIGHT:
 			if (this->pos.second < 5) {
@@ -255,33 +238,17 @@ bool Mode1Player::Move(Labyrinth& Other) {
 		Other.printLabyrinth(this->Name, DONT_SHOW_WALLS);
 
 		if (this->pos == Other.getFinish()) {
-			//cout << "[DEBUG]" << "Finished" << endl;
-			//cin.get();
 			return WON;
 		}
 
 		c = _getch();
 	}
-
-	//system("cls");
-	//cout << "[DEBUG]" << "Hit wall: " << Other.getFinish().first << ' ' << Other.getFinish().second << endl;
-	//cout << "[DEBUG]" << "Hit wall: " << this->pos.first << ' ' << this->pos.second << endl;
-	//cin.get();
 	return HIT_WALL;
 }
 
 Labyrinth& Player::getLabyrinth() {
 	return this->Own;
 }
-
-//Mode1Player::Mode1Player() {
-//	this->Other = nullptr;
-//}
-
-//void Mode1Player::setLabyrinth(Labyrinth& l) {
-//	this->pos = l.getStart();
-//	this->Other = &l;
-//}
 
 Mode2Player::Mode2Player() : points(0), lives(PLAYER_LIVES), dead(false), m2(nullptr) {
 
@@ -323,10 +290,7 @@ Mode2Player* Mode2Player::MetSomeone(vector<Mode2Player>& v) {
 			PAUSE
 			return &p;
 		}
-		//cout << "Player " << p.getID() << endl;
 	}
-	//if (int c = _getch() != char(13))
-	//	c = _getch();
 	return nullptr;
 }
 
@@ -415,15 +379,7 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 
 	c = _getch();
 
-	//if (c && c != 224) {
-	//	cout << "[DEBUG]" << "exiting" << endl;
-	//	cin.get();
-	//	return false;
-	//}
-
 	while (!this->Own.isClosed(this->pos, c)) {
-		//cout << "[DEBUG]" << c << endl;
-		//cin.get();
 		switch (c)
 		{
 		case KEY_UP:
@@ -431,8 +387,6 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 				this->Own.alter(this->pos, PLAYER_UP);
 				this->pos.first -= 1;
 			}
-			//cout << "[DEBUG]" << this->pos.first << endl;
-			//cin.get();
 			break;
 		case KEY_DOWN:
 			if (this->pos.first < 5) {
@@ -445,8 +399,6 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 				this->Own.alter(this->pos, PLAYER_LEFT);
 				this->pos.second -= 1;
 			}
-			//cout << "[DEBUG]" << this->pos.second << endl;
-			//cin.get();
 			break;
 		case KEY_RIGHT:
 			if (this->pos.second < 5) {
@@ -467,17 +419,10 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 		}
 
 		if (this->pos == this->Own.getFinish()) {
-			//cout << "[DEBUG]" << "Finished" << endl;
-			//cin.get();
 			return WON2;
 		}
 
 		c = _getch();
 	}
-
-	//system("cls");
-	//cout << "[DEBUG]" << "Hit wall: " << Other.getFinish().first << ' ' << Other.getFinish().second << endl;
-	//cout << "[DEBUG]" << "Hit wall: " << this->pos.first << ' ' << this->pos.second << endl;
-	//cin.get();
 	return HIT_WALL2;
 }
