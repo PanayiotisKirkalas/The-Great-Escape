@@ -40,10 +40,8 @@ class Mode1Player : public Player {
 
 public:
 	using Player::getLabyrinth;
-	//Mode1Player();
 	void BuildLabyrinth();
 	bool Move(Labyrinth& Other);
-	//void setLabyrinth(Labyrinth& l);
 };
 
 class Mode2Player : public Player {
@@ -68,6 +66,5 @@ public:
 	void DecPoints(int value = 1);
 	int LoseLife();
 	int Move(vector<Mode2Player>& v, bool agro = true);
-	//int SingleMove();
 };
 
