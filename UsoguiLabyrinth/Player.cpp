@@ -151,11 +151,12 @@ void Mode1Player::BuildLabyrinth() {
 				cout << "Choose block to add wall around (" << i << "/20): ";
 				scanf_s("%2s", RowColumn, 3);
 				while ((c = fgetc(stdin)) != '\n' && c != EOF);
-				if (RowColumn[0] == '-' && RowColumn[1] == '1') return;
+				if (RowColumn[0] == '-' && RowColumn[1] == '1') goto stop_building;
 			}
 			cout << "Choose direction to add wall(w/a/s/d): ";
 			cin >> dir;
 
+			
 			start = pair<int, int>(RowColumn[0] - 'a', RowColumn[1] - '1');
 			switch (dir) {
 			case KEY_UP:
@@ -179,6 +180,7 @@ void Mode1Player::BuildLabyrinth() {
 			RowColumn[0] = ' '; RowColumn[1] = ' ';
 		}
 
+	stop_building:
 		system("cls");
 		this->Own.printLabyrinth(this->Name, SHOW_WALLS);
 		cout << endl << "Finish labyrinth building?(y/n): ";
@@ -243,6 +245,7 @@ bool Mode1Player::Move(Labyrinth& Other) {
 
 		c = _getch();
 	}
+
 	return HIT_WALL;
 }
 
@@ -424,5 +427,6 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 
 		c = _getch();
 	}
+
 	return HIT_WALL2;
 }
