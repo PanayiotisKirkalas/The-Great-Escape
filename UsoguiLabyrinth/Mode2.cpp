@@ -43,7 +43,6 @@ Mode2::Mode2(int n_Players) {
 coordinate Mode2::SetupLabyrinth(Labyrinth& l) {
 	time_point<system_clock> t = system_clock::now();
 	srand(RANDOM_SEED(t));
-	//int n_walls = 20;
 	coordinate start, finish;
 
 	for (int i = 0; i < 6; ++i) {
@@ -62,7 +61,6 @@ coordinate Mode2::SetupLabyrinth(Labyrinth& l) {
 		start.second = rand() % 6;
 		finish.first = rand() % 6;
 		finish.second = rand() % 6;
-		//DEBUG(DISTANCE(start, finish), "")
 	} while (DISTANCE(start, finish) < 4.75);
 
 	l.setStart(start);
@@ -80,7 +78,7 @@ void Mode2::BuildLabyrinth(Labyrinth& l) {
 	pos.second = rand() % 6;
 
 	grid.Open(pos);
-	while (grid.getClosed().size() > 0) { // && l.getNofWalls() > 20
+	while (grid.getClosed().size() > 0) {
 		dir = 1 + rand() % 4;
 		temp = pos;
 		switch (dir % 2)
@@ -99,10 +97,6 @@ void Mode2::BuildLabyrinth(Labyrinth& l) {
 			l.EraseWall(pos, dir);
 		}
 
-		//l.printLabyrinth("DEBUG", true);
-		//cout << grid.getClosed().size() << ' ' << l.getNofWalls() << ' ' << dir << ' ' << char(pos.first + 'A') << pos.second + 1 << endl;
-		//cin.get();
-
 		pos = grid.getRandomOpen();
 	}
 }
@@ -111,35 +105,16 @@ void Mode2::Setup() {
 	string name;
 	char c;
 
-	//for (int i = 0; i < Players.size(); ++i) {
-	//	system("cls");
-	//	cout << "Player " << i + 1 << endl;
-	//	cout << "Username: " << std::flush;
-	//	cin >> name;
-	//	//system("cls");
-	//	Players.at(i) = Mode2Player(name);
-	//	cout << endl;
-	//	//system("cls");
-	//	//cout << "Give to other player" << endl;
-	//	//cout << "Press enter to continue..." << std::flush;
-	//	//if (c2 = _getch() != char(13))
-	//		//c2 = _getch();
-	//}
 	for (int i = 0; i < Players.size(); ++i) {
 		system("cls");
 		cout << "Enter your name: ";
 		cin >> name;
 		Players[i].setName(name);
 		Players[i].setPos(SetupLabyrinth(Players[i].getLabyrinth()));
-		//cout << Players[i].getPos().first << Players[i].getPos().second << endl << std::flush;
-		//if (c = _getch() != char(13))
-		//	c = _getch();
 		system("cls");
 		cout << "Next player" << endl;
 		cout << "Press Enter to continue..." << endl << std::flush;
 		PAUSE
-		//Players[i].getLabyrinth().printLabyrinth(Players[i].getName(), true);
-		//cout << endl << endl;
 	}
 	system("cls");
 }
@@ -153,7 +128,6 @@ void Mode2::Play() {
 	for (i = 0; (result = Players.at(i).Move(Players)) != WON; (++i) %= Players.size()) {
 		cout << "[DEBUG] " << i << endl;
 		if (result != HIT_WALL) {
-			//DEBUG("else", "")
 			i = result - 1;
 		}
 		else {
@@ -167,7 +141,6 @@ void Mode2::Play() {
 		system("cls");
 	}
 
-	//system("cls");
 	cout << endl << Players.at(i).getName() << " won!" << endl;
 	PAUSE
 	return;
@@ -230,15 +203,6 @@ const list<coordinate>& Grid::getOpen() const {
 }
 
 const coordinate& Grid::getRandomOpen() const {
-	//coordinate pos;
-
-	//do {
-	//	pos.first = rand() % 6;
-	//	pos.second = rand() % 6;
-	//} while (!(this->rooms[pos.first][pos.second].open));
-
-	//return pos;
-
 	int index = rand() % this->open.size();
 	list<coordinate>::const_iterator it = this->open.begin();
 	std::advance(it, index);

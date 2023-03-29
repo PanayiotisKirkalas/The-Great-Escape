@@ -38,9 +38,7 @@ void Mode1::Setup() {
 		PAUSE
 	}
 
-	//P[0].setLabyrinth(P[1].getLabyrinth());
 	P[0].setPos(P[1].getLabyrinth().getStart());
-	//P[1].setLabyrinth(P[0].getLabyrinth());
 	P[1].setPos(P[0].getLabyrinth().getStart());
 	system("cls");
 }
@@ -58,11 +56,4 @@ void Mode1::Play() {
 
 	cout << endl << P[i].getName() << " won!";
 	PAUSE
-
-	/*
-	if (P[0].Move() == WON)
-		return;
-	if (P[1].Move() == WON)
-		return;
-	*/
 }

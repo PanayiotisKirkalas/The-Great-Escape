@@ -312,9 +312,7 @@ int Mode2Player::Bet(Mode2Player* p) {
 		cout << "How many points you will bet?: ";
 		cin >> bet;
 	}
-	//DEBUG("Dec ", "points")
 	p->DecPoints(bet);
-	//DEBUG("After Dec ", "points")
 	return bet;
 }
 
@@ -323,7 +321,6 @@ int Mode2Player::Battle(Mode2Player* p) {
 
 	bet1 = Bet(this);
 	system("cls");
-	//DEBUG("After Dec points", 2)
 	cout << p->getName() << "'s turn" << endl;
 	cout << "Press enter to contiue...";
 	PAUSE
@@ -409,6 +406,8 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 				this->pos.second += 1;
 			}
 			break;
+		default:
+			this->DecPoints();
 		}
 
 		this->IncPoints();

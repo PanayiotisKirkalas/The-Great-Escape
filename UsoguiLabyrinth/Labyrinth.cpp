@@ -21,22 +21,53 @@ using std::string;
 #define LEFT_LIMIT 2
 #define RIGHT_LIMIT 12
 #define DOWN_LIMIT 12
+#define SIZE 6
 #define DEBUG(x, y) cout << x << y << endl; (_getch() != char(13) ? _getch() : 0);
 #define PAUSE if (int c = _getch() != char(13)) {c = _getch();}
 
 Labyrinth::Labyrinth() : n_walls(0){
-	char side = 'A';
+	char side = 'A', column = '1';
+	vector<char> row;
 
-	map.push_back(vector<char>{_ROOM_, _VWALL_, '1', _ROOM_, '2', _ROOM_, '3', _ROOM_, '4', _ROOM_, '5', _ROOM_, '6', _ROOM_}); //14 elements
-	//14 elements
-	map.push_back(vector<char>{_HWALL_, '+', _HWALL_, _HWALL_, _HWALL_, _HWALL_, _HWALL_, _HWALL_, _HWALL_, _HWALL_, _HWALL_, _HWALL_, _HWALL_, _HWALL_});
-	for (int i = 2; i < 14; ++i) {
+	row.push_back(_ROOM_);
+	row.push_back(_VWALL_);
+	for (int i = 0; i < (SIZE * 2); ++i) {
+		row.push_back(column);
+		row.push_back(_ROOM_);
+		++column;
+	}
+	map.push_back(row);
+	row.clear();
+
+	row.push_back(_HWALL_);
+	row.push_back(_JOINT_);
+	for (int i = 0; i < (SIZE * 2); ++i) {
+		row.push_back(_HWALL_);
+	}
+	map.push_back(row);
+	row.clear();
+
+	for (int i = 0; i < (SIZE * 2); ++i) {
 		if (i % 2 == 0) {
-			map.push_back(vector<char>{side, _VWALL_, _ROOM_, _ROOM_, _ROOM_, _ROOM_, _ROOM_, _ROOM_, _ROOM_, _ROOM_, _ROOM_, _ROOM_, _ROOM_, _ROOM_}); //14 elements
+			row.push_back(side);
 			++side;
+			row.push_back(_VWALL_);
+			for (int k = 0; k < SIZE; ++k) {
+				row.push_back(_ROOM_);
+				row.push_back(_ROOM_);
+			}
 		}
-		else//14 elements
-			map.push_back(vector<char>{_ROOM_, _VWALL_, _ROOM_, _JOINT_, _ROOM_, _JOINT_, _ROOM_, _JOINT_, _ROOM_, _JOINT_, _ROOM_, _JOINT_, _ROOM_, _JOINT_});
+		else {
+			row.push_back(_ROOM_);
+			row.push_back(_VWALL_);
+			for (int k = 0; k < SIZE; ++k) {
+				row.push_back(_ROOM_);
+				row.push_back(_JOINT_);
+			}
+		}
+
+		map.push_back(row);
+		row.clear();
 	}
 }
 
@@ -71,7 +102,6 @@ void Labyrinth::alter(coordinate pos, char c) {
 
 bool Labyrinth::BuildWall(coordinate pos, int dir) {
 	pos = translate(pos);
-	//DEBUG(pos.first, pos.second)
 	
 	switch (dir) {
 	case 1:
@@ -102,7 +132,6 @@ bool Labyrinth::BuildWall(coordinate pos, int dir) {
 
 bool Labyrinth::EraseWall(coordinate pos, int dir) {
 	pos = translate(pos);
-	//DEBUG(pos.first, pos.second)
 
 	switch (dir) {
 	case 1:
@@ -121,12 +150,8 @@ bool Labyrinth::EraseWall(coordinate pos, int dir) {
 
 	if ((pos.first <= 2 && dir == 1) || (pos.second <= 2 && dir == 4))
 		return false;
-	//if (dir == 1 || dir == 3) {
-		map.at(pos.first).at(pos.second) = ' ';
-	//}
-	//else if (dir == 2 || dir == 4) {
-	//	map.at(pos.first).at(pos.second) = _VWALL_;
-	//}
+	
+	map.at(pos.first).at(pos.second) = ' ';
 	this->AddDelWall(-1);
 	return true;
 }
@@ -155,7 +180,6 @@ coordinate Labyrinth::getStart() const {
 }
 
 coordinate Labyrinth::getFinish() const {
-	//return this->finish;
 	coordinate c = this->finish;
 	c.first = (c.first / 2) - 1;
 	c.second = (c.second / 2) - 1;
