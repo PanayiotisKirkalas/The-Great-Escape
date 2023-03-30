@@ -122,7 +122,7 @@ void Mode1Player::Ask() {
 asking:
 	system("cls");
 	cout << "Player: " << this->Name << endl;
-	cout << "Do you want to build your own labyrinth or get randomly generated one? (yes/no)";
+	cout << "Do you want to build your own labyrinth? (yes/no)";
 	cin >> input;
 	system("cls");
 
