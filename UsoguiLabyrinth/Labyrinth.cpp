@@ -2,12 +2,20 @@
 #include <cmath>
 #include <string>
 #include <stdlib.h>
+#include <iterator>
+#include <chrono>
 
 #include "Labyrinth.h"
 using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
+using std::make_pair;
+using std::chrono::system_clock;
+using std::chrono::duration_cast;
+using std::chrono::milliseconds;
+using std::chrono::duration;
+using std::chrono::time_point;
 
 #define _UP_ 'w'
 #define _DOWN_ 's'
@@ -17,6 +25,10 @@ using std::string;
 #define _HWALL_ '='
 #define _JOINT_ '+'
 #define _ROOM_ ' '
+#define UP 1
+#define DOWN 3
+#define RIGHT 2
+#define LEFT 4
 #define UPPER_LIMIT 2
 #define LEFT_LIMIT 2
 #define RIGHT_LIMIT 12
@@ -24,6 +36,8 @@ using std::string;
 #define SIZE 6
 #define DEBUG(x, y) cout << x << y << endl; (_getch() != char(13) ? _getch() : 0);
 #define PAUSE if (int c = _getch() != char(13)) {c = _getch();}
+#define RANDOM_SEED(x) duration_cast<milliseconds>(x.time_since_epoch()).count()
+#define DISTANCE(x, y) sqrt(pow(start.first - finish.first, 2)+pow(start.second - finish.second, 2))
 
 Labyrinth::Labyrinth() : n_walls(0){
 	char side = 'A', column = '1';
@@ -104,16 +118,16 @@ bool Labyrinth::BuildWall(coordinate pos, int dir) {
 	pos = translate(pos);
 	
 	switch (dir) {
-	case 1:
+	case UP:
 		--pos.first;
 		break;
-	case 2:
+	case RIGHT:
 		++pos.second;
 		break;
-	case 3:
+	case DOWN:
 		++pos.first;
 		break;
-	case 4:
+	case LEFT:
 		--pos.second;
 		break;
 	}
@@ -134,16 +148,16 @@ bool Labyrinth::EraseWall(coordinate pos, int dir) {
 	pos = translate(pos);
 
 	switch (dir) {
-	case 1:
+	case UP:
 		--pos.first;
 		break;
-	case 2:
+	case RIGHT:
 		++pos.second;
 		break;
-	case 3:
+	case DOWN:
 		++pos.first;
 		break;
-	case 4:
+	case LEFT:
 		--pos.second;
 		break;
 	}
@@ -186,6 +200,67 @@ coordinate Labyrinth::getFinish() const {
 	return c;
 }
 
+coordinate Labyrinth::SetupLabyrinth() {
+	time_point<system_clock> t = system_clock::now();
+	srand(RANDOM_SEED(t));
+	coordinate start, finish;
+
+	for (int i = 0; i < 6; ++i) {
+		for (int j = 0; j < 6; ++j) {
+			this->BuildWall(make_pair(i, j), 1);
+			this->BuildWall(make_pair(i, j), 4);
+			if (i < 5)
+				this->BuildWall(make_pair(i, j), 3);
+			if (j < 5)
+				this->BuildWall(make_pair(i, j), 2);
+		}
+	}
+
+	do {
+		start.first = rand() % 6;
+		start.second = rand() % 6;
+		finish.first = rand() % 6;
+		finish.second = rand() % 6;
+	} while (DISTANCE(start, finish) < 4.75);
+
+	this->setStart(start);
+	this->setFinish(finish);
+	BuildLabyrinth();
+	return start;
+}
+
+void Labyrinth::BuildLabyrinth() {
+	int dir;
+	coordinate pos, temp;
+	Grid grid;
+
+	pos.first = rand() % 6;
+	pos.second = rand() % 6;
+
+	grid.Open(pos);
+	while (grid.getClosed().size() > 0) {
+		dir = 1 + rand() % 4;
+		temp = pos;
+		switch (dir % 2)
+		{
+		case 1:
+			temp.first += (dir == 1 ? -1 : 1);
+			break;
+		case 0:
+			temp.second += (dir == 2 ? 1 : -1);
+			break;
+		default:
+			break;
+		}
+		if (std::find(grid.getFrontier().begin(), grid.getFrontier().end(), temp) != grid.getFrontier().end()) {
+			grid.Open(temp);
+			this->EraseWall(pos, dir);
+		}
+
+		pos = grid.getRandomOpen();
+	}
+}
+
 void Labyrinth::setStart(coordinate pos) {
 	this->start = translate(pos);
 	this->alter(pos, 'S');
@@ -202,4 +277,65 @@ void Labyrinth::AddDelWall(int condition) {
 
 int Labyrinth::getNofWalls() const {
 	return this->n_walls;
+}
+
+Room::Room() : open(false), frontier(false), closed(true) {
+
+}
+
+Grid::Grid() {
+	for (int i = 0; i < 6; ++i) {
+		for (int j = 0; j < 6; ++j) {
+			closed.push_back(make_pair(i, j));
+		}
+	}
+}
+
+int Grid::Open(coordinate pos) {
+	rooms[pos.first][pos.second].open = true;
+	rooms[pos.first][pos.second].closed = false;
+	rooms[pos.first][pos.second].frontier = false;
+
+	this->open.push_back(make_pair(pos.first, pos.second));
+	this->frontier.remove(pos);
+	this->closed.remove(pos);
+
+	// else-if not used bcs they function separately
+	if (pos.first > 0 && rooms[pos.first - 1][pos.second].closed == true) {
+		rooms[pos.first - 1][pos.second].frontier = true;
+		this->frontier.push_back(make_pair(pos.first - 1, pos.second));
+	}
+	if (pos.first < 5 && rooms[pos.first + 1][pos.second].closed == true) {
+		rooms[pos.first + 1][pos.second].frontier = true;
+		this->frontier.push_back(make_pair(pos.first + 1, pos.second));
+	}
+	if (pos.second > 0 && rooms[pos.first][pos.second - 1].closed == true) {
+		rooms[pos.first][pos.second - 1].frontier = true;
+		this->frontier.push_back(make_pair(pos.first, pos.second - 1));
+	}
+	if (pos.second < 5 && rooms[pos.first][pos.second + 1].closed == true) {
+		rooms[pos.first][pos.second + 1].frontier = true;
+		this->frontier.push_back(make_pair(pos.first, pos.second + 1));
+	}
+
+	return this->open.size();
+}
+
+const list<coordinate>& Grid::getOpen() const {
+	return this->open;
+}
+
+const coordinate& Grid::getRandomOpen() const {
+	int index = rand() % this->open.size();
+	list<coordinate>::const_iterator it = this->open.begin();
+	std::advance(it, index);
+	return *it;
+}
+
+const list<coordinate>& Grid::getClosed() const {
+	return this->closed;
+}
+
+const list<coordinate>& Grid::getFrontier() const {
+	return this->frontier;
 }

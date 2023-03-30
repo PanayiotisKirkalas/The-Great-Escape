@@ -91,7 +91,14 @@ bool MainMenu2(bool& go_a, bool Mode) {
 
 			case 1:
 				system("cls");
-				cout << "How to Play" << endl << endl << "\tMove: \tW, A, S, D for Up, Left, Down and Right respectively" << endl << endl << "Press enter to go back";
+				if (!Mode) {
+					Mode1 m1;
+					cout << m1.Explanation;
+				}
+				else{
+					Mode2 m2;
+					cout << m2.Explanation;
+				}
 				PAUSE
 				system("cls");
 				break;

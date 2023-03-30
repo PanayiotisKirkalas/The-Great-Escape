@@ -1,2 +1,4 @@
-﻿  Labyrinth.cpp
+﻿  Player.cpp
+C:\Users\Admin\source\repos\UsoguiLabyrinth\UsoguiLabyrinth\Player.cpp(342,2): warning C4144: '!=': relational expression as switch expression
+C:\Users\Admin\source\repos\UsoguiLabyrinth\UsoguiLabyrinth\Player.cpp(345,3): warning C4144: '>': relational expression as switch expression
   UsoguiLabyrinth.vcxproj -> C:\Users\Admin\source\repos\UsoguiLabyrinth\Debug\UsoguiLabyrinth.exe

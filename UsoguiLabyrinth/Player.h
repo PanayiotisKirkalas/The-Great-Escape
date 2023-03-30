@@ -40,6 +40,7 @@ class Mode1Player : public Player {
 
 public:
 	using Player::getLabyrinth;
+	void Ask();
 	void BuildLabyrinth();
 	bool Move(Labyrinth& Other);
 };

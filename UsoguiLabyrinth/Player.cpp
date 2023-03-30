@@ -116,8 +116,34 @@ int Player::getID() const {
 	return this->id;
 }
 
+void Mode1Player::Ask() {
+	string input;
+
+asking:
+	system("cls");
+	cout << "Player: " << this->Name << endl;
+	cout << "Do you want to build your own labyrinth or get randomly generated one? (yes/no)";
+	cin >> input;
+	system("cls");
+
+	if (input[0] == 'n') {
+		this->pos = this->Own.SetupLabyrinth();
+		this->Own.printLabyrinth(this->Name, SHOW_WALLS);
+	}
+	else if (input[0] == 'y') {
+		BuildLabyrinth();
+	}
+	cout << "\nIs that good enough? (yes/no)";
+	cin >> input;
+
+	if (input[0] == 'n') {
+		this->Own = Labyrinth();
+		goto asking;
+	}
+}
+
 void Mode1Player::BuildLabyrinth() {
-	char RowColumn[3] = { ' ', ' '}, dir;
+	char RowColumn[3] = { ' ', ' ' }, dir;
 	int c;
 	coordinate start, finish;
 
@@ -151,12 +177,12 @@ void Mode1Player::BuildLabyrinth() {
 				cout << "Choose block to add wall around (" << i << "/20): ";
 				scanf_s("%2s", RowColumn, 3);
 				while ((c = fgetc(stdin)) != '\n' && c != EOF);
-				if (RowColumn[0] == '-' && RowColumn[1] == '1') goto stop_building;
+				if (RowColumn[0] == '-' && RowColumn[1] == '1') return;
 			}
 			cout << "Choose direction to add wall(w/a/s/d): ";
 			cin >> dir;
 
-			
+
 			start = pair<int, int>(RowColumn[0] - 'a', RowColumn[1] - '1');
 			switch (dir) {
 			case KEY_UP:
@@ -174,26 +200,11 @@ void Mode1Player::BuildLabyrinth() {
 			default:
 				--i;
 				break;
-			
+
 			}
 
 			RowColumn[0] = ' '; RowColumn[1] = ' ';
 		}
-
-	stop_building:
-		system("cls");
-		this->Own.printLabyrinth(this->Name, SHOW_WALLS);
-		cout << endl << "Finish labyrinth building?(y/n): ";
-		cin >> RowColumn[0];
-		if (RowColumn[0] == 'y')
-			return;
-		this->Own = Labyrinth();
-		RowColumn[0] = ' ';
-		RowColumn[1] = ' ';
-		c = 0;
-		start = coordinate();
-		finish = coordinate();
-		system("cls");
 	} while (1);
 }
 
@@ -387,24 +398,32 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 				this->Own.alter(this->pos, PLAYER_UP);
 				this->pos.first -= 1;
 			}
+			else
+				this->DecPoints();
 			break;
 		case KEY_DOWN:
 			if (this->pos.first < 5) {
 				this->Own.alter(this->pos, PLAYER_DOWN);
 				this->pos.first += 1;
 			}
+			else
+				this->DecPoints();
 			break;
 		case KEY_LEFT:
 			if (this->pos.second > 0) {
 				this->Own.alter(this->pos, PLAYER_LEFT);
 				this->pos.second -= 1;
 			}
+			else
+				this->DecPoints();
 			break;
 		case KEY_RIGHT:
 			if (this->pos.second < 5) {
 				this->Own.alter(this->pos, PLAYER_RIGHT);
 				this->pos.second += 1;
 			}
+			else
+				this->DecPoints();
 			break;
 		default:
 			this->DecPoints();
