@@ -33,8 +33,15 @@ using std::abs;
 #define _JOINT_ '+'
 #define _ROOM_ ' '
 
-#define DEBUG(x, y) cout << x << y << endl; (_getch() != char(13) ? _getch() : 1);
+#ifndef DEBUG(x, y)
+#define DEBUG(x, y) cout << "[DEBUG] " << x << y << endl; (_getch() != char(13) ? _getch() : 0);
+#endif // DEBUG(x, y) cout << x << y << endl; (_getch() != char(13) ? _getch() : 0);
+
+#ifndef PAUSE
 #define PAUSE if (int c = _getch() != char(13)) {c = _getch();}
+#endif // !1
+
+
 
 Player::Player(string Name) : symbol(PLAYER_SYM), Name(Name){
 
@@ -120,6 +127,7 @@ void Mode1Player::Ask() {
 	string input;
 
 asking:
+	this->Own = Labyrinth();
 	system("cls");
 	cout << "Player: " << this->Name << endl;
 	cout << "Do you want to build your own labyrinth? (yes/no)";
@@ -137,7 +145,6 @@ asking:
 	cin >> input;
 
 	if (input[0] == 'n') {
-		this->Own = Labyrinth();
 		goto asking;
 	}
 }

@@ -27,12 +27,14 @@ using std::endl;
 #define LOST -3
 #define DONT_SHOW_WALLS false
 #define SHOW_WALLS true
-#define coordinate pair<int, int>
 
-#define DEBUG(x, y) cout << x << y << endl; (_getch() != char(13) ? _getch() : 1);
+#ifndef DEBUG(x, y)
+#define DEBUG(x, y) cout << "[DEBUG] " << x << y << endl; (_getch() != char(13) ? _getch() : 0);
+#endif // DEBUG(x, y) cout << x << y << endl; (_getch() != char(13) ? _getch() : 0);
+
+#ifndef PAUSE
 #define PAUSE if (int c = _getch() != char(13)) {c = _getch();}
-//#define RANDOM_SEED(x) duration_cast<milliseconds>(x.time_since_epoch()).count()
-//#define DISTANCE(x, y) sqrt(pow(start.first - finish.first, 2)+pow(start.second - finish.second, 2))
+#endif // !1
 
 
 Mode2::Mode2() {

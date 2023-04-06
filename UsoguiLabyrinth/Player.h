@@ -9,7 +9,10 @@ using std::string;
 using std::pair;
 using std::vector;
 
+#ifndef coordinate 
 #define coordinate pair<int, int>
+#endif // !coordinate pair<int, int>
+
 
 class Mode2;
 

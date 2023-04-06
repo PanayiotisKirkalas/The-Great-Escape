@@ -11,7 +11,9 @@ using std::pair;
 using std::string;
 using std::list;
 
+#ifndef coordinate
 #define coordinate pair<int, int>
+#endif // !coordinate pair<int, int>
 
 class Room {
 public:

@@ -18,7 +18,10 @@ using std::endl;
 #define elif else if
 #define HIT_WALL true
 #define WON false
+
+#ifndef PAUSE
 #define PAUSE if (int c = _getch() != char(13)) {c = _getch();}
+#endif // !1
 
 bool MainMenu2(bool& go_a, bool Mode) {
 	char ch;

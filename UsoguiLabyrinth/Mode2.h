@@ -4,7 +4,9 @@
 
 #include "Player.h"
 
+#ifndef coordinate
 #define coordinate pair<int, int>
+#endif // !coordinate pair<int, int>
 using std::list;
 
 //class Room {
