@@ -110,13 +110,21 @@ void Mode1::Play() {
 //}
 
 Solver::Solver(Labyrinth& other)
-	: pos(other.getStart()), l(other) {}
+	: pos(other.getStart()), l(other) {
+	for (int i = 0; i < 6; ++i) {
+		for (int k = 0; k < 6; ++k) {
+			checkedRooms[i][k] = false;
+		}
+	}
+}
 
 int Solver::Move(int dir, bool on_branch) {
 	if (on_branch) {
 		branches.top().directions[dir] = false;
 		--branches.top().openDirN;
 	}
+
+	checkedRooms[pos.first][pos.second] = true;
 
 	switch (dir)
 	{
@@ -139,35 +147,33 @@ int Solver::Move(int dir, bool on_branch) {
 	return (dir + 2) % 4;
 }
 
-//Solver* Solver::Call(int dir) {
-//	coordinate temp = this->pos;
-//
-//	switch (dir)
-//	{
-//	case UP:
-//		--temp.first;
-//		break;
-//	case RIGHT:
-//		++temp.second;
-//		break;
-//	case DOWN:
-//		++temp.first;
-//		break;
-//	case LEFT:
-//		--temp.second;
-//		break;
-//	default:
-//		break;
-//	}
-//
-//	return new Solver(temp, dir, this, this->l);
-//
-//}
+coordinate Solver::calculatePos(coordinate pos, int dir) {
+	switch (dir)
+	{
+	case UP:
+		--pos.first;
+		break;
+	case RIGHT:
+		++pos.second;
+		break;
+	case DOWN:
+		++pos.first;
+		break;
+	case LEFT:
+		--pos.second;
+		break;
+	default:
+		break;
+	}
+
+	return pos;
+}
 
 bool Solver::Solve() {
 	bool directions[4] = { true, true, true, true }, deja_vu = false;
 	char dir[4] = { 'w', 'd', 's', 'a' };
 	int openDir, openDirN = 4, prev = -1;
+	coordinate temp;
 
 	//branches.push(Branch());
 	//branches.top().pos = this->pos;
@@ -181,6 +187,9 @@ bool Solver::Solve() {
 			return true;
 
 		for (int i = 0; i < 4; ++i) {
+			temp = calculatePos(pos, i);
+			if (checkedRooms[temp.first][temp.second])
+				goto close_path;
 			if (!directions[i])
 				goto close_path;
 			if (l.isClosed(this->pos, dir[i]) || i == prev) 
