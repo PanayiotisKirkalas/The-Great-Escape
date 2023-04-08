@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <iterator>
 #include <chrono>
+#include <conio.h>
 
 #include "Labyrinth.h"
+#include "Player.h"
 using std::cout;
 using std::cin;
 using std::endl;
@@ -51,7 +53,7 @@ using std::chrono::time_point;
 #define DISTANCE(x, y) sqrt(pow(start.first - finish.first, 2)+pow(start.second - finish.second, 2))
 #endif // ! DISTANCE(x, y) sqrt(pow(start.first - finish.first, 2)+pow(start.second - finish.second, 2))
 
-Labyrinth::Labyrinth() : n_walls(0){
+Labyrinth::Labyrinth() : n_walls(0) {
 	char side = 'A', column = '1';
 	vector<char> row;
 
@@ -97,8 +99,12 @@ Labyrinth::Labyrinth() : n_walls(0){
 	}
 }
 
-void Labyrinth::printLabyrinth(const string& name, bool show_walls) {
-	cout << "Player: " << name << endl;
+void Labyrinth::SetName(string_view name) {
+	this->pName = name;
+}
+
+void Labyrinth::printLabyrinth(bool show_walls) {
+	cout << "Player: " << pName << endl;
 	char c;
 	for (int i = 0; i < 14; ++i) {
 		for (int j = 0; j < 14; ++j) {
@@ -106,6 +112,12 @@ void Labyrinth::printLabyrinth(const string& name, bool show_walls) {
 			cout << ((i >= 2 && j >= 2) && (c == _VWALL_ || c == _HWALL_) && !show_walls ? ' ' : c) << std::flush;
 		}
 		cout << endl;
+	}
+}
+
+void Labyrinth::printRow(int index) {
+	for (int i = 0; i < 14; ++i) {
+		cout << map.at(index).at(i) << std::flush;
 	}
 }
 
@@ -146,13 +158,14 @@ bool Labyrinth::BuildWall(coordinate pos, int dir) {
 
 	if (map.at(pos.first).at(pos.second) != _ROOM_)
 		return false;
+	if (map.at(pos.first).at(pos.second) == ' ')
+		this->AddDelWall(1);
 	if (dir == 1 || dir == 3) {
 		map.at(pos.first).at(pos.second) = _HWALL_;
 	}
 	else if (dir == 2 || dir == 4) {
 		map.at(pos.first).at(pos.second) = _VWALL_;
 	}
-	this->AddDelWall(1);
 	return true;
 }
 
@@ -176,9 +189,9 @@ bool Labyrinth::EraseWall(coordinate pos, int dir) {
 
 	if ((pos.first <= 2 && dir == 1) || (pos.second <= 2 && dir == 4))
 		return false;
-	
+	if (map.at(pos.first).at(pos.second) != ' ')
+		this->AddDelWall(-1);
 	map.at(pos.first).at(pos.second) = ' ';
-	this->AddDelWall(-1);
 	return true;
 }
 
@@ -270,6 +283,12 @@ void Labyrinth::BuildLabyrinth() {
 		}
 
 		pos = grid.getRandomOpen();
+	}
+
+	while (n_walls > 20) {
+		dir = 1 + rand() % 4;
+		pos = grid.getRandomOpen();
+		this->EraseWall(pos, dir);
 	}
 }
 

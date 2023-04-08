@@ -63,11 +63,7 @@ void Mode1::Setup() {
 	
 	for (int i = 0; i < 2; ++i) {
 		system("cls");
-		cout << "Player " << i + 1 << endl;
-		cout << "Username: " << std::flush;
-		cin >> name;
-		system("cls");
-		P[i] = Mode1Player(name);
+		P[i].askName();
 		P[i].Ask();
 		cout << "Validating Labyrinth..." << endl;
 		while (!Validate(P[i].getLabyrinth())) {
@@ -99,15 +95,22 @@ void Mode1::Play() {
 		system("cls");
 	}
 
-	P[i].getLabyrinth().printLabyrinth(P[i].getName(), SHOW_WALLS);
+	system("cls");
+	cout << "Player: " << P[i].getName();
+	for (int j = 0; j < (6 - P[i].getName().length()); ++j) {
+		cout << ' ';
+	}
+	cout << "   ";
+	cout << "Player: " << P[!i].getName() << endl;
+	for (int j = 0; j < 14; ++j) {
+		P[!i].getLabyrinth().printRow(j);
+		cout << "   ";
+		P[i].getLabyrinth().printRow(j);
+		cout << endl;
+	}
 	cout << endl << P[i].getName() << " won!";
 	PAUSE
 }
-
-//Solver::Solver(coordinate p, int prev_dir, Solver* prev, Labyrinth& other)
-//	: s{ nullptr, nullptr, nullptr, nullptr }, pos(p), l(other), prev(prev) {
-//	s[(prev_dir + 2) % 4] = prev;
-//}
 
 Solver::Solver(Labyrinth& other)
 	: pos(other.getStart()), l(other) {
@@ -175,11 +178,6 @@ bool Solver::Solve() {
 	int openDir, openDirN = 4, prev = -1;
 	coordinate temp;
 
-	//branches.push(Branch());
-	//branches.top().pos = this->pos;
-
-	static int test = 0, test2 = 0;
-
 	while (1) {
 		openDirN = 4;
 
@@ -203,7 +201,6 @@ bool Solver::Solve() {
 			if (i == LEFT && pos.second <= 0)
 				goto close_path;
 
-			//DEBUG(++test, i);
 			goto select_path;
 		close_path:
 			directions[i] = false;
@@ -213,23 +210,17 @@ bool Solver::Solve() {
 			openDir = i;
 		}
 
-		//DEBUG(char(pos.first + 'A'), pos.second + 1)
-		//DEBUG("Local Directions: ", directions[0] * 1000 + directions[1] * 100 + directions[2] * 10 + directions[3]);
-		//DEBUG("Local Open paths: ", openDirN);
-
 		
 		if (openDirN == 0) {
 			if (branches.empty())
 				return false;
 			if (pos == branches.top().pos) {
-				//DEBUG("Popping", "")
 				branches.pop();
 			}
 			if (branches.empty())
 				return false;
 
 			pos = branches.top().pos;
-			//openDirs[branches.top().second.first] = false;
 			openDirN = branches.top().openDirN;
 			for (int i = 0; i < 4; ++i) {
 				directions[i] = branches.top().directions[i];
@@ -262,15 +253,6 @@ bool Solver::Solve() {
 			prev = Move(openDir, true);
 		}
 
-		//if (!branches.empty())
-		//	if (branches.top().pos == this->pos) {
-		//		DEBUG(char(bPos.first + 'A'), char(bPos.second + '1'))
-		//		DEBUG("Top branch Directions :", bDir[0] * 1000 + bDir[1] * 100 + bDir[2] * 10 + bDir[3]);
-		//		DEBUG("Top branch Open paths: ", branches.top().openDirN);
-		//	}
-		//DEBUG("Moving: ", dir[openDir]);
-		//DEBUG("Size: ", branches.size());
-
 		if (prev >= 0) {
 			for (int i = 0; i < 4; ++i) {
 				directions[i] = true;
@@ -279,16 +261,3 @@ bool Solver::Solve() {
 		}
 	}
 }
-
-//s[i] = Call(i);
-					////DEBUG(++test2, i);
-					//if (s[i]->Solve())
-					//	return true;
-
-//Solver::~Solver() {
-//	for (int i = 0; i < 4; ++i) {
-//		DEBUG("Destructor", i)
-//		if (this->s[i] != nullptr && this->s[i] != this->prev)
-//			delete s[i];
-//	}
-//}

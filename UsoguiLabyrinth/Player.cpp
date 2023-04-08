@@ -41,12 +41,6 @@ using std::abs;
 #define PAUSE if (int c = _getch() != char(13)) {c = _getch();}
 #endif // !1
 
-
-
-Player::Player(string Name) : symbol(PLAYER_SYM), Name(Name){
-
-}
-
 Player::Player(int id) : id(id), symbol(PLAYER_SYM) {
 
 }
@@ -55,11 +49,18 @@ Player::Player() : symbol(PLAYER_SYM) {
 
 }
 
+void Player::askName() {
+	cout << "Username: " << std::flush;
+	cin >> this->Name;
+	system("cls");
+	this->Own.SetName(this->Name);
+}
+
 bool Player::Move() {
 	int c, ex;
 
 	this->Own.alter(this->pos, this->symbol);
-	this->Own.printLabyrinth(this->Name, false);
+	this->Own.printLabyrinth(false);
 
 	c = _getch();
 
@@ -88,7 +89,7 @@ bool Player::Move() {
 
 		this->Own.alter(this->pos, this->symbol);
 		system("cls");
-		this->Own.printLabyrinth(this->Name, DONT_SHOW_WALLS);
+		this->Own.printLabyrinth(DONT_SHOW_WALLS);
 
 		if (this->pos == this->Own.getFinish())
 			return WON;
@@ -128,6 +129,7 @@ void Mode1Player::Ask() {
 
 asking:
 	this->Own = Labyrinth();
+	this->Own.SetName(this->Name);
 	system("cls");
 	cout << "Player: " << this->Name << endl;
 	cout << "Do you want to build your own labyrinth? (yes/no)";
@@ -136,7 +138,7 @@ asking:
 
 	if (input[0] == 'n') {
 		this->pos = this->Own.SetupLabyrinth();
-		this->Own.printLabyrinth(this->Name, SHOW_WALLS);
+		this->Own.printLabyrinth(SHOW_WALLS);
 	}
 	else if (input[0] == 'y') {
 		BuildLabyrinth();
@@ -155,7 +157,7 @@ void Mode1Player::BuildLabyrinth() {
 	coordinate start, finish;
 
 	do {
-		this->Own.printLabyrinth(this->Name, SHOW_WALLS);
+		this->Own.printLabyrinth(SHOW_WALLS);
 		cout << endl << "Build your labyrinth:" << endl;
 		while ((RowColumn[0] < 'a' || RowColumn[0] > 'f') || (RowColumn[1] < '1' || RowColumn[1] > '6')) {
 			cout << "Starting point: ";
@@ -177,10 +179,9 @@ void Mode1Player::BuildLabyrinth() {
 		RowColumn[0] = ' '; RowColumn[1] = ' ';
 		for (int i = 1; i <= 20 && (RowColumn[0] != '-' && RowColumn[1] != '1'); ++i) {
 			system("cls");
-			this->Own.printLabyrinth(this->Name, SHOW_WALLS);
+			this->Own.printLabyrinth(SHOW_WALLS);
 			cout << endl << "Build your labyrinth (Enter -1 to stop building):" << endl;
 			while ((RowColumn[0] < 'a' || RowColumn[0] > 'f') || (RowColumn[1] < '1' || RowColumn[1] > '6')) {
-				//cout << "Press -1 to stop building" << endl;
 				cout << "Choose block to add wall around (" << i << "/20): ";
 				scanf_s("%2s", RowColumn, 3);
 				while ((c = fgetc(stdin)) != '\n' && c != EOF);
@@ -219,7 +220,7 @@ bool Mode1Player::Move(Labyrinth& Other) {
 	int c;
 
 	Other.alter(this->pos, this->symbol);
-	Other.printLabyrinth(this->Name, DONT_SHOW_WALLS);
+	Other.printLabyrinth(DONT_SHOW_WALLS);
 
 	c = _getch();
 
@@ -255,7 +256,7 @@ bool Mode1Player::Move(Labyrinth& Other) {
 
 		Other.alter(this->pos, this->symbol);
 		system("cls");
-		Other.printLabyrinth(this->Name, DONT_SHOW_WALLS);
+		Other.printLabyrinth(DONT_SHOW_WALLS);
 
 		if (this->pos == Other.getFinish()) {
 			return WON;
@@ -282,9 +283,6 @@ Mode2Player::Mode2Player(int id, Mode2 *mode) : points(0), lives(PLAYER_LIVES), 
 
 void Mode2Player::setPoints(int v) {
 	this->points = v;
-}
-void Mode2Player::setName(string name) {
-	this->Name = name;
 }
 int Mode2Player::getPoints() const {
 	return this->points;
@@ -392,7 +390,7 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 		return this->id + 1;
 
 	this->Own.alter(this->pos, this->symbol);
-	this->Own.printLabyrinth(this->Name, DONT_SHOW_WALLS);
+	this->Own.printLabyrinth(DONT_SHOW_WALLS);
 	cout << "Your points: " << this->points;
 
 	c = _getch();
@@ -439,7 +437,7 @@ int Mode2Player::Move(vector<Mode2Player>& v, bool agro) {
 		this->IncPoints();
 		this->Own.alter(this->pos, this->symbol);
 		system("cls");
-		this->Own.printLabyrinth(this->Name, DONT_SHOW_WALLS);
+		this->Own.printLabyrinth(DONT_SHOW_WALLS);
 		cout << "Your points: " << this->points;
 
 		if ((p = MetSomeone(v)) != nullptr) {

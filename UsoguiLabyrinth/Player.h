@@ -8,7 +8,6 @@
 using std::string;
 using std::pair;
 using std::vector;
-
 #ifndef coordinate 
 #define coordinate pair<int, int>
 #endif // !coordinate pair<int, int>
@@ -22,13 +21,13 @@ protected:
 	int id;
 	char symbol;
 	coordinate pos;
-	string Name;
 	Labyrinth Own;
 	
 public:
+	string Name;
 	Player();
 	Player(int id);
-	Player(string Name);
+	void askName();
 	bool Move();
 	char getSymbol() const;
 	void setPos(coordinate p);
@@ -64,7 +63,6 @@ public:
 	Mode2Player();
 	Mode2Player(int value, Mode2* mode);
 	void setPoints(int v);
-	void setName(string name);
 	int getPoints() const;
 	void IncPoints(int value = 1);
 	void DecPoints(int value = 1);

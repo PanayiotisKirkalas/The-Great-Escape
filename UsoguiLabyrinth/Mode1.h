@@ -27,21 +27,16 @@ public:
 };
 
 class Solver {
-	//Solver* s[4], *prev;
-	//int prev;
 	stack<Branch> branches;
 	coordinate pos;
 	Labyrinth& l;
 	bool checkedRooms[6][6];
 
-	//Solver(coordinate p, int prev_dir, Solver* prev, Labyrinth& other);
 	int Move(int dir, bool on_branch);
 	coordinate calculatePos(coordinate pos, int dir);
-	//Solver* Call(int dir);
 public:
 	Solver(Labyrinth& other);
 	bool Solve();
-	//~Solver();
 };
 
 class Mode1
