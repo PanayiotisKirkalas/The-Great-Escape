@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Main {
 
-	boolean MainMenu2(boolean go_a, boolean Mode) {
+	static boolean MainMenu2(boolean go_a, boolean Mode) {
 		char ch;
 		int index = 0, n = 0;
 		while (true) {
@@ -107,7 +107,7 @@ public class Main {
 		}
 	}
 
-	boolean MainMenu(boolean go_a) {
+	static boolean MainMenu(boolean go_a) {
 		char ch;
 		int index = 0;
 		while (true) {
@@ -169,8 +169,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) {
-		
-
+		boolean ggo = MainMenu(false);
 	}
 
 }
