@@ -1,4 +1,5 @@
-
+import java.awt.Event;
+import java.awt.event.KeyEvent;
 public class Mode1Player extends Player {
 
 	public Mode1Player(int id)
@@ -13,7 +14,7 @@ public class Mode1Player extends Player {
 		while (true)
 		{
 			this.Own = new Labyrinth();
-			this.Own.SetName(this.Name);
+			this.Own.setName(this.Name);
 			
 			System.out.print("\033[2J\033[1;1H");
 			System.out.println("Player: " + this.Name);
@@ -87,7 +88,7 @@ public class Mode1Player extends Player {
 				start = coordinate.make_pair(RowColumn[0] - 97, RowColumn[1] - 49);
 				switch (dir) 
 				{
-					case KEY_UP:
+					case Player.KEY_UP:
 						this.Own.BuildWall(start, 1);
 						break;
 					case KEY_LEFT:
@@ -111,39 +112,39 @@ public class Mode1Player extends Player {
 	
 	public boolean Move(Labyrinth Other)
 	{
-		int c;
+		char c;
 		
 		Other.alter(this.pos, this.symbol);
-		Other.printLibrary(DONT_SHOW_WALLS);
+		Other.printLabyrinth(DONT_SHOW_WALLS);
 		
-		c = (int)keyboard.next().charAt(0);
+		c = KeyEvent.KEY_PRESSED;
 		
 		while(!Other.isClosed(this.pos, c))
 		{
 			switch (c)
 			{
 				case KEY_UP:
-					if (this.pos.first > 0) {
+					if (this.pos.y_axis > 0) {
 						Other.alter(this.pos, PLAYER_UP);
-						this.pos.first -= 1;
+						this.pos.y_axis -= 1;
 					}
 					break;
 				case KEY_DOWN:
-					if (this.pos.first < 5) {
+					if (this.pos.y_axis < 5) {
 						Other.alter(this.pos, PLAYER_DOWN);
-						this.pos.first += 1;
+						this.pos.y_axis += 1;
 					}
 					break;
 				case KEY_LEFT:
-					if (this.pos.second > 0) {
+					if (this.pos.x_axis > 0) {
 						Other.alter(this.pos, PLAYER_LEFT);
-						this.pos.second -= 1;
+						this.pos.x_axis -= 1;
 					}
 					break;
 				case KEY_RIGHT:
-					if (this.pos.second < 5) {
+					if (this.pos.x_axis < 5) {
 						Other.alter(this.pos, PLAYER_RIGHT);
-						this.pos.second += 1;
+						this.pos.x_axis += 1;
 					}
 					break;
 			}
@@ -153,7 +154,7 @@ public class Mode1Player extends Player {
 			
 			if (this.pos == Other.getFinish()) return WON;
 			
-			c = (int)keyboard.next().charAt(0);
+			c = KeyEvent.KEY_PRESSED;
 		}
 		
 		return HIT_WALL;

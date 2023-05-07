@@ -5,6 +5,14 @@ import java.util.*;
 
 public class Main {
 
+	static boolean IntToBool(int x) {
+		return x != 0;
+	}
+	
+	static int BoolToInt(boolean b) {
+		return (b) ? 1 : 0;
+	}
+	
 	static boolean MainMenu2(boolean go_a, boolean Mode) {
 		char ch;
 		int index = 0, n = 0;

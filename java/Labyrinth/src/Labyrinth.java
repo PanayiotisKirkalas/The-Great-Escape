@@ -66,7 +66,7 @@ public
 		}
 	}
 
-	void SetName(CharSequence name) {
+	void setName(CharSequence name) {
 		this.pName = name;
 	}
 	
@@ -180,7 +180,7 @@ public
 		c.x_axis = (c.x_axis / 2) - 1;
 		return c;
 	}
-	coordinate SetupLabyrinth() {
+	void SetupLabyrinth() {
 		Random t = new Random();
 		coordinate start = new coordinate(), finish = new coordinate();
 
@@ -204,9 +204,8 @@ public
 
 		this.setStart(start);
 		this.setFinish(finish);
-		return start;
 	}
-	void GenerateLabyrinth() {
+	coordinate GenerateLabyrinth() {
 		int dir;
 		coordinate pos = new coordinate(), temp = new coordinate();
 		Grid grid = new Grid();
@@ -245,6 +244,8 @@ public
 			pos = grid.getRandomOpen();
 			this.EraseWall(pos, dir);
 		}
+
+		return start;
 	}
 	void setStart(coordinate pos) {
 		this.start = translate(pos);

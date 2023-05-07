@@ -40,7 +40,6 @@ class Mode2Player extends Player {
 			System.out.print("Press enter to contiue...");
 			new Scanner(System.in).nextLine();//pause
 	 		return p.getID();
-			break;
 		default:
 			switch (Integer.compare(bet1, bet2))
 			{
@@ -88,14 +87,16 @@ class Mode2Player extends Player {
 		return bet;
 	}
 	public Mode2Player() {
+		super(-1);
 		points = 0;
 		lives = 2;
 		dead = false;
 		m2 = null;
 	}
 	public Mode2Player(int id, Mode2 mode) {
-		this.id = id;
+		super(id);
 		this.symbol = 'O';
+		m2 = mode;
 	}
 	public void setPoints(int v) {
 		this.points = v;
@@ -117,7 +118,7 @@ class Mode2Player extends Player {
 		return this.lives;
 	}
 	public int Move(ArrayList<Mode2Player> v) {
-		int c;
+		char c;
 		Mode2Player p;
 
 		if (this.dead)
@@ -133,33 +134,33 @@ class Mode2Player extends Player {
 			switch (c)
 			{
 			case 'w':
-				if (this.pos.first > 0) {
+				if (this.pos.y_axis > 0) {
 					this.Own.alter(this.pos, '^');
-					this.pos.first -= 1;
+					this.pos.y_axis -= 1;
 				}
 				else
-					this.DecPoints();
+					this.DecPoints(1);
 				break;
 			case 's':
-				if (this.pos.first < 5) {
+				if (this.pos.y_axis < 5) {
 					this.Own.alter(this.pos, 'V');
-					this.pos.first += 1;
+					this.pos.y_axis += 1;
 				}
 				else
-					this.DecPoints();
+					this.DecPoints(1);
 				break;
 			case 'a':
-				if (this.pos.second > 0) {
+				if (this.pos.x_axis > 0) {
 					this.Own.alter(this.pos, '<');
-					this.pos.second -= 1;
+					this.pos.x_axis -= 1;
 				}
 				else
-					this.DecPoints();
+					this.DecPoints(1);
 				break;
 			case 'd':
-				if (this.pos.second < 5) {
+				if (this.pos.x_axis < 5) {
 					this.Own.alter(this.pos, '>');
-					this.pos.second += 1;
+					this.pos.x_axis += 1;
 				}
 				else
 					this.DecPoints(1);

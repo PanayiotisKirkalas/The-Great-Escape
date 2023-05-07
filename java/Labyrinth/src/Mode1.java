@@ -5,7 +5,7 @@ class Mode1
 {
 	private Mode1Player P[];
 
-	public String Explanation;
+	public static String Explanation;
 
 	public Mode1() {
 		for (int i = 0; i < 2; ++i) {
@@ -62,7 +62,7 @@ class Mode1
 	public void Play() {
 		char c;
 		boolean i;
-		for (i = false; P[i].Move(P[!i].getLabyrinth()) != WON; i = !i) {
+		for (i = false; P[Main.BoolToInt(i)].Move(P[Main.BoolToInt(!i)].getLabyrinth()) != Player.WON; i = !i) {
 			System.out.print("\033[H\033[2J");//clear screen
 			System.out.println("You hit a wall. Give next player");
 			System.out.println("Press enter to continue...");
@@ -71,19 +71,19 @@ class Mode1
 		}
 
 		System.out.print("\033[H\033[2J");//clear screen
-		System.out.print("Player: " + P[i].getName());
-		for (int j = 0; j < (6 - P[i].getName().length()); ++j) {
+		System.out.print("Player: " + P[Main.BoolToInt(i)].getName());
+		for (int j = 0; j < (6 - P[Main.BoolToInt(i)].getName().length()); ++j) {
 			System.out.print(' ');
 		}
 		System.out.print("   ");
-		System.out.println("Player: " << P[!i].getName());
+		System.out.println("Player: " + P[Main.BoolToInt(!i)].getName());
 		for (int j = 0; j < 14; ++j) {
-			P[!i].getLabyrinth().printRow(j);
+			P[Main.BoolToInt(!i)].getLabyrinth().printRow(j);
 			System.out.print("   ");
-			P[i].getLabyrinth().printRow(j);
+			P[Main.BoolToInt(i)].getLabyrinth().printRow(j);
 			System.out.println();
 		}
-		System.out.print(System.getProperty("line.separator") + P[i].getName()+" won!");
+		System.out.print(System.getProperty("line.separator") + P[Main.BoolToInt(i)].getName()+" won!");
 		new Scanner(System.in).nextLine();//pause
 	}
 };
