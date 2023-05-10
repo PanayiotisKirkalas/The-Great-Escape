@@ -32,24 +32,26 @@ class Solver {
 		return (dir + 2) % 4;
 	}
 	private coordinate calculatePos(coordinate pos, int dir) {
+		coordinate temp = new coordinate(pos);
+		temp = pos;
 		switch (dir) {
 		case 1://Up
-			--pos.y_axis;
+			--temp.y_axis;
 			break;
 		case 2://Right
-			++pos.x_axis;
+			++temp.x_axis;
 			break;
 		case 3://Down
-			++pos.y_axis;
+			++temp.y_axis;
 			break;
 		case 4://Left
-			--pos.x_axis;
+			--temp.x_axis;
 			break;
 		default:
 			break;
 		}
 
-		return pos;
+		return temp;
 	}
 
 	public Solver(Labyrinth other) {

@@ -1,7 +1,5 @@
 import java.util.List;
-import java.io.*;
 import java.util.*;
-import javafx.util.*;
 
 class Grid {
 	List<coordinate> closed, open, frontier;

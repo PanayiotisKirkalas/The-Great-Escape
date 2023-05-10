@@ -13,9 +13,10 @@ class Labyrinth
 	private ArrayList<ArrayList<Character>> map;
 
 	private coordinate translate(coordinate c) {
-		c.y_axis = (c.y_axis * 2) + 2;
-		c.x_axis = (c.x_axis * 2) + 2;
-		return c;
+		coordinate temp = new coordinate(c);
+		temp.y_axis = (temp.y_axis * 2) + 2;
+		temp.x_axis = (temp.x_axis * 2) + 2;
+		return temp;
 	}
 
 public
@@ -71,83 +72,83 @@ public
 	}
 	
 	char at(coordinate pos) {
-		pos = translate(pos);
-		return map.get(pos.y_axis).get(pos.x_axis);
+		coordinate temp = (translate(pos));
+		return map.get(temp.y_axis).get(temp.x_axis);
 	}
 	
 	void alter(coordinate pos, char c) {
-		pos = translate(pos);
-		map.get(pos.y_axis).set(pos.x_axis, c);
+		coordinate temp = (translate(pos));;
+		map.get(temp.y_axis).set(temp.x_axis, c);
 		return;
 	}
 	
 	boolean BuildWall(coordinate pos, int dir) {
-		pos = translate(pos);
+		coordinate temp = (translate(pos));;
 		
 		switch (dir) {
 		case 1://Up
-			--pos.y_axis;
+			--temp.y_axis;
 			break;
 		case 2://Right
-			++pos.x_axis;
+			++temp.x_axis;
 			break;
 		case 3://Down
-			++pos.y_axis;
+			++temp.y_axis;
 			break;
 		case 4://Left
-			--pos.x_axis;
+			--temp.x_axis;
 			break;
 		}
 
-		if (!map.get(pos.y_axis).get(pos.x_axis).equals(' '))
+		if (!map.get(temp.y_axis).get(temp.x_axis).equals(' '))
 			return false;
-		if (map.get(pos.y_axis).get(pos.x_axis).equals(' '))
+		if (map.get(temp.y_axis).get(temp.x_axis).equals(' '))
 			this.AddDelWall(1);
 		if (dir == 1 || dir == 3) {
-			map.get(pos.y_axis).set(pos.x_axis, '|');
+			map.get(temp.y_axis).set(temp.x_axis, '|');
 		}
 		else if (dir == 2 || dir == 4) {
-			map.get(pos.y_axis).set(pos.x_axis, '=');
+			map.get(temp.y_axis).set(temp.x_axis, '=');
 		}
 		return true;
 	}
 	
 	boolean EraseWall(coordinate pos, int dir) {
-		pos = translate(pos);
+		coordinate temp = (translate(pos));;
 
 		switch (dir) {
 		case 1://Up
-			--pos.y_axis;
+			--temp.y_axis;
 			break;
 		case 2://Right
-			++pos.x_axis;
+			++temp.x_axis;
 			break;
 		case 3://Down
-			++pos.y_axis;
+			++temp.y_axis;
 			break;
 		case 4://Left
-			--pos.x_axis;
+			--temp.x_axis;
 			break;
 		}
 
-		if ((pos.y_axis <= 2 && dir == 1) || (pos.x_axis <= 2 && dir == 4))
+		if ((temp.y_axis <= 2 && dir == 1) || (temp.x_axis <= 2 && dir == 4))
 			return false;
-		if (!map.get(pos.y_axis).get(pos.x_axis).equals(' '))
+		if (!map.get(temp.y_axis).get(temp.x_axis).equals(' '))
 			this.AddDelWall(-1);
-		map.get(pos.y_axis).set(pos.x_axis, ' ');
+		map.get(temp.y_axis).set(temp.x_axis, ' ');
 		return true;
 	}
 	boolean isClosed(coordinate pos, char dir) {
-		pos = translate(pos);
+		coordinate temp = (translate(pos));;
 		switch (dir) {
 		case 1://Up
-			return (!map.get(pos.y_axis - 1).get(pos.x_axis).equals(' ') && pos.y_axis > 2 ? true : false);
+			return (!map.get(temp.y_axis - 1).get(temp.x_axis).equals(' ') && temp.y_axis > 2 ? true : false);
 		case 3://Down
-			return (!map.get(pos.y_axis + 1).get(pos.x_axis).equals(' ') && pos.y_axis < 12 ? true : false);
+			return (!map.get(temp.y_axis + 1).get(temp.x_axis).equals(' ') && temp.y_axis < 12 ? true : false);
 		case 4://Left
-			return (!map.get(pos.y_axis).get(pos.x_axis - 1).equals(' ') && pos.x_axis > 2 ? true : false);
+			return (!map.get(temp.y_axis).get(temp.x_axis - 1).equals(' ') && temp.x_axis > 2 ? true : false);
 		case 2://Right
-			return (!map.get(pos.y_axis).get(pos.x_axis + 1).equals(' ') && pos.x_axis < 12 ? true : false);
+			return (!map.get(temp.y_axis).get(pos.x_axis + 1).equals(' ') && temp.x_axis < 12 ? true : false);
 		default:
 			return false;
 		}
@@ -169,13 +170,13 @@ public
 		}
 	}
 	coordinate getStart() {
-		coordinate c = this.start;
+		coordinate c = new coordinate(this.start);
 		c.y_axis = (c.y_axis / 2) - 1;
 		c.x_axis = (c.x_axis / 2) - 1;
 		return c;
 	}
 	coordinate getFinish() {
-		coordinate c = this.finish;
+		coordinate c = new coordinate(this.finish);
 		c.y_axis = (c.y_axis / 2) - 1;
 		c.x_axis = (c.x_axis / 2) - 1;
 		return c;
@@ -219,7 +220,7 @@ public
 		grid.Open(pos);
 		while (grid.getClosed().size() > 0) {
 			dir = 1 + t.nextInt(4);
-			temp = pos;
+			temp.copy(pos);;
 			switch (dir % 2)
 			{
 			case 1:
@@ -245,14 +246,14 @@ public
 			this.EraseWall(pos, dir);
 		}
 
-		return start;
+		return this.getStart();
 	}
 	void setStart(coordinate pos) {
-		this.start = translate(pos);
+		this.start.copy(translate(pos));
 		this.alter(pos, 'S');
 	}
 	void setFinish(coordinate pos) {
-		this.finish = translate(pos);
+		this.finish.copy(translate(pos));
 		this.alter(pos, 'F');
 	}
 	void AddDelWall(int condition) {

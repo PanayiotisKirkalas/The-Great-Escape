@@ -58,13 +58,12 @@ public class Main {
 				switch (index)
 				{
 				case 0:
-					go_a = false;
-
+					go_a = true;
+					
 					if (!Mode) {
 						Mode1 m1 = new Mode1();
 						m1.Setup();
 						m1.Play();
-						go_a = true;
 						break;
 					}
 					
@@ -78,7 +77,6 @@ public class Main {
 						m2.Setup();
 						m2.Play();
 					}
-					go_a = true;
 					break;
 
 				case 1:
@@ -94,7 +92,7 @@ public class Main {
 					break;
 
 				case 2:
-					return true;
+					return go_a;
 
 				default:
 					break;
@@ -145,17 +143,15 @@ public class Main {
 				switch (index)
 				{
 				case 0:
-					go_a = false;
-					MainMenu2(go_a, false);
+					go_a = MainMenu2(false, false);
 					break;
 
 				case 1:
-					go_a = false;
-					MainMenu2(go_a, true);
+					go_a = MainMenu2(false, true);
 					break;
 
 				case 2:
-					return true;
+					return go_a;
 
 				default:
 					break;

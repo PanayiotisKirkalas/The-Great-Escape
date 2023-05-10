@@ -47,7 +47,7 @@ public class Player {
 	
 	public String getName()
 	{
-		return this.Name;
+		return new String(this.Name);
 	}
 	
 	public char getSymbol()
@@ -57,7 +57,7 @@ public class Player {
 	
 	public coordinate getPos()
 	{
-		return this.pos;
+		return new coordinate(this.pos);
 	}
 	
 	public int getID()
@@ -67,7 +67,7 @@ public class Player {
 	
 	public void setPos(coordinate p)
 	{
-		this.pos = p;
+		this.pos.copy(p);
 	}
 	
 	public Labyrinth getLabyrinth()
