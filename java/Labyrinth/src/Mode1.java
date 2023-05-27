@@ -5,7 +5,7 @@ class Mode1
 {
 	private Mode1Player P[];
 
-	public static String Explanation;
+	public String Explanation;
 
 	public Mode1() {
 		for (int i = 0; i < 2; ++i) {
@@ -62,6 +62,9 @@ class Mode1
 	public void Play() {
 		char c;
 		boolean i;
+		
+		Setup();
+		
 		for (i = false; P[Main.BoolToInt(i)].Move(P[Main.BoolToInt(!i)].getLabyrinth()) != Player.WON; i = !i) {
 			System.out.print("\033[H\033[2J");//clear screen
 			System.out.println("You hit a wall. Give next player");

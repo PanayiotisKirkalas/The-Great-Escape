@@ -1,179 +1,115 @@
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.*;
+import javafx.scene.*;
+import javafx.stage.*;
+import javafx.application.*;
 
-
-public class Main {
-
+public class Main extends Application{
+	private static boolean run = true;
+	
 	static boolean IntToBool(int x) {
 		return x != 0;
 	}
-	
+
 	static int BoolToInt(boolean b) {
 		return (b) ? 1 : 0;
 	}
-	
-	static boolean MainMenu2(boolean go_a, boolean Mode) {
+
+	static void MainMenu2(boolean go_a, boolean Mode) {
 		char ch;
 		int index = 0, n = 0;
-		while (true) {
-			System.out.print("\033[H\033[2J");//clear screen;;
-			System.out.println("MAIN MENU");
-			switch (index)
-			{
-			case 0:
-				System.out.print("    ->Play");
-				if (go_a) {
-					System.out.print(" again"); //+ 1 tab
-				}
-				System.out.print('\n' + "      How to play" + '\n' + "      Back");
-				break;
-				
-			case 1:
-				System.out.print("      Play");
-				if (go_a) {
-					System.out.print(" again"); //+ 1 tab
-				}
-				System.out.print('\n' + "    ->How to play" + '\n' + "      Back");
-				break;
-
-			case 2:
-				System.out.print("      Play");
-				if (go_a) {
-					System.out.print(" again"); //+ 1 tab
-				}
-				System.out.print('\n' + "      How to play" + '\n' + "    ->Back");
-				break;
-
-			default:
-				break;
-			}
-
-			while (true) {
-				if ((ch = KeyEvent.KEY_PRESSED) == KeyEvent.VK_ENTER) {
-					break;
-				}
-			}
-			if (ch == KeyEvent.VK_ENTER) {
-				switch (index)
-				{
-				case 0:
-					go_a = true;
-					
-					if (!Mode) {
-						Mode1 m1 = new Mode1();
-						m1.Setup();
-						m1.Play();
-						break;
-					}
-					
-					do {
-						System.out.print("\033[H\033[2J");//clear screen;;
-						System.out.print("Number of players (" + 2 + '-' + 4 + "): ");
-						n = new Scanner(System.in).nextInt();
-					} while (n > 4 || n < 2);
-					{
-						Mode2 m2 = new Mode2(n);
-						m2.Setup();
-						m2.Play();
-					}
-					break;
-
-				case 1:
-					System.out.print("\033[H\033[2J");//clear screen;;
-					if (!Mode) {
-						System.out.print(Mode1.Explanation);
-					}
-					else{
-						System.out.print(Mode2.Explanation);
-					}
-					new Scanner(System.in).nextLine();//pause
-					System.out.print("\033[H\033[2J");//clear screen;;
-					break;
-
-				case 2:
-					return go_a;
-
-				default:
-					break;
-				}
-			}
-			else if (ch == 'w'/* && index > 0*/) {
-				if (index == 0)
-					index = 2;
-				else
-					index--;
-			}
-			else if (ch == 's'/* && index < 2*/) {
-				if (index == 2)
-					index = 0;
-				else
-					index++;
-			}
-		}
+		String Play = "Play";
+		
+		MainMenuScreen MainMenuScr = new MainMenuScreen();
+		MainMenuScr.SetOption(0, () -> {
+			System.out.println("pressed by builder 1");
+			return "true";
+		}, Play);
+		MainMenuScr.SetOption(1, () -> {
+			System.out.println("pressed by builder 2");
+			return "true";
+		}, Play);
+		MainMenuScr.SetOption(2, () -> {
+			System.out.println("pressed by builder 3");
+			MainMenuScr.close();
+			return "true";
+		}, Play);
+//		if (Boolean.parseBoolean(MainMenuScr.Replay)) Play = Play + " again";
+//		
+//		if (!Mode) {
+//			MainMenuScr.SetOption(0, () -> {
+//				Mode1 m = new Mode1();
+//				m.Play();
+//				return "true";
+//			}, Play);
+//			
+//			MainMenuScr.SetOption(1, () -> {
+//				//Show explanation
+//				Mode1 m = new Mode1();
+//				System.out.println(m.Explanation);
+//				return "false";
+//			}, "How to play");
+//		}
+//		else {
+//			MainMenuScr.SetOption(0, () -> {
+//				Mode2 m = new Mode2();
+//				m.Play();
+//				return "true";
+//			}, Play);
+//			
+//			MainMenuScr.SetOption(1, () -> {
+//				//Show explanation
+//				Mode2 m = new Mode2();
+//				System.out.println(m.Explanation);
+//				return "false";
+//			}, "How to play");
+//		}
+//		MainMenuScr.SetOption(2, () -> {
+//			return "";
+//		}, "Back");
+		MainMenuScr.show();
 	}
 
-	static boolean MainMenu(boolean go_a) {
-		char ch;
-		int index = 0;
-		while (true) {
-			System.out.print("\033[H\033[2J");//clear screen;;
-			System.out.println("MAIN MENU");
-			switch (index) {
-			case 0:
-				System.out.println("    ->1v1"); //+ 1 tab
-				System.out.println("      Everyone for themselves (up to 4 players)" + '\n' + "      Quit");
-				break;
-			case 1:
-				System.out.println("      1v1"); //+ 1 tab
-				System.out.println("    ->Everyone for themselves (up to 4 players)" + '\n' + "      Quit");
-				break;
-			case 2:
-				System.out.println("      1v1"); //+ 1 tab
-				System.out.println("      Everyone for themselves (up to 4 players)" + '\n' + "    ->Quit");
-				break;
+	static void MainMenu(boolean go_a) {
+		MainMenuScreen MainMenuScr = new MainMenuScreen();
+		MainMenuScr.setTitle("The Great Escape");
+		MainMenuScr.SetOption(0, () -> {
+			System.out.println("[DEBUG]1v1");
+			MainMenuScr.hide();
+			MainMenu2(false, false);
+			run = false;
+			System.out.println(run);
+			if (run) {
+				
 			}
+			else 
+				MainMenuScr.show();
+			return "1v1";
+		}, "1v1");
+		MainMenuScr.SetOption(1, () -> {
+			System.out.println("[DEBUG]Battle Royale");
+			MainMenuScr.hide();
+			MainMenu2(false, true);
+			System.out.println("[DEBUG]Battle Royale");
+			MainMenuScr.show();
+			return "Battle Royale";
+		}, "Battle Royale");
+		MainMenuScr.SetOption(2, () -> {
+			//System.out.println("[DEBUG]Quit");
+			Platform.exit();
+			return "Quit";
+		}, "Quit");
+		MainMenuScr.show();
+	}
 
-			while (true) {
-				if ((ch = KeyEvent.KEY_PRESSED) == KeyEvent.VK_ENTER) {
-					break;
-				}
-			}
-			if (ch == KeyEvent.VK_ENTER) {
-				switch (index)
-				{
-				case 0:
-					go_a = MainMenu2(false, false);
-					break;
-
-				case 1:
-					go_a = MainMenu2(false, true);
-					break;
-
-				case 2:
-					return go_a;
-
-				default:
-					break;
-				}
-			}
-			else if (ch == 'w'/* && index > 0*/) {
-				if (index == 0)
-					index = 2;
-				else
-					index--;
-			}
-			else if (ch == 's'/* && index < 2*/) {
-				if (index == 2)
-					index = 0;
-				else
-					index++;
-			}
-		}
+	public void start(Stage primaryStage) {
+		primaryStage.setResizable(false);
+		MainMenu(false);
 	}
 	
 	public static void main(String[] args) {
-		boolean ggo = MainMenu(false);
+		launch(args);
 	}
 
 }

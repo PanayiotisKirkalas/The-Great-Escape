@@ -6,7 +6,7 @@ class Mode2
 	private ArrayList<Mode2Player> Players;
 	private ArrayList<Integer> CorpseList;
 
-	public static String Explanation;
+	public String Explanation;
 
 	Mode2() {
 		Explanation =
