@@ -6,10 +6,12 @@ import java.util.*;
 
 class Labyrinth
 {
-	public static boolean show_walls = false;
+	public static boolean show_walls = false, inner = false;
 	private int n_walls;
 	private coordinate start, finish;
-	private CharSequence pName;
+	//private CharSequence pName;
+	private Player player;
+	private GameScreen game;
 	private ArrayList<ArrayList<Character>> map;
 
 	private coordinate translate(coordinate c) {
@@ -18,21 +20,33 @@ class Labyrinth
 		temp.x_axis = (temp.x_axis * 2) + 2;
 		return temp;
 	}
+	
+//	private coordinate rTranslate(coordinate c) {
+//		coordinate temp = new coordinate(c);
+//		temp.y_axis = (temp.y_axis / 2) + 1;
+//		temp.x_axis = (temp.x_axis / 2) + 1;
+//		return temp;
+//	}
 
 public
-	Labyrinth() {
+	Labyrinth(GameScreen p_game) {
+		this.game = p_game;
 		n_walls = 0;
+		map = new ArrayList<ArrayList<Character>>();
+		start = new coordinate();
+		finish = new coordinate();
 		char side = 'A', column = '1';
 		ArrayList<Character> row = new ArrayList<Character>();
 
 		row.add(' ');
 		row.add('|');
-		for (int i = 0; i < (6 * 2); ++i) {
+		for (int i = 0; i < 6; ++i) {
 			row.add(column);
 			row.add(' ');
 			++column;
 		}
-		map.add(row);
+//		map.add(row);
+		map.add(new ArrayList<Character>(row));
 		row.clear();
 
 		row.add('=');
@@ -40,7 +54,8 @@ public
 		for (int i = 0; i < (6 * 2); ++i) {
 			row.add('=');
 		}
-		map.add(row);
+		//map.add(row);
+		map.add(new ArrayList<Character>(row));
 		row.clear();
 
 		for (int i = 0; i < (6 * 2); ++i) {
@@ -62,28 +77,37 @@ public
 				}
 			}
 
-			map.add(row);
+//			map.add(row);
+			map.add(new ArrayList<Character>(row));
 			row.clear();
 		}
 	}
 
-	void setName(CharSequence name) {
-		this.pName = name;
-	}
+//	void setName(CharSequence name) {
+//		this.pName = name;
+//	}
 	
 	char at(coordinate pos) {
 		coordinate temp = (translate(pos));
 		return map.get(temp.y_axis).get(temp.x_axis);
 	}
 	
+	char ingameAt(coordinate pos) {
+		return map.get(pos.y_axis).get(pos.x_axis);
+	}
+	
 	void alter(coordinate pos, char c) {
-		coordinate temp = (translate(pos));;
+		coordinate temp = (inner) ? (pos) : translate(pos);
+		System.out.println("[DEBUG] " + pos.y_axis + "/" + pos.x_axis);
 		map.get(temp.y_axis).set(temp.x_axis, c);
+		temp = (!inner) ? translate(pos) : temp;
+		game.Alter(temp, c);
+		inner = false;
 		return;
 	}
 	
 	boolean BuildWall(coordinate pos, int dir) {
-		coordinate temp = (translate(pos));;
+		coordinate temp = (translate(pos));
 		
 		switch (dir) {
 		case 1://Up
@@ -105,16 +129,20 @@ public
 		if (map.get(temp.y_axis).get(temp.x_axis).equals(' '))
 			this.AddDelWall(1);
 		if (dir == 1 || dir == 3) {
-			map.get(temp.y_axis).set(temp.x_axis, '|');
+			//map.get(temp.y_axis).set(temp.x_axis, '|');
+			inner = true;
+			alter(temp, '=');
 		}
 		else if (dir == 2 || dir == 4) {
-			map.get(temp.y_axis).set(temp.x_axis, '=');
+			//map.get(temp.y_axis).set(temp.x_axis, '=');
+			inner = true;
+			alter(temp, '|');
 		}
 		return true;
 	}
 	
 	boolean EraseWall(coordinate pos, int dir) {
-		coordinate temp = (translate(pos));;
+		coordinate temp = (translate(pos));
 
 		switch (dir) {
 		case 1://Up
@@ -135,40 +163,42 @@ public
 			return false;
 		if (!map.get(temp.y_axis).get(temp.x_axis).equals(' '))
 			this.AddDelWall(-1);
-		map.get(temp.y_axis).set(temp.x_axis, ' ');
+		//map.get(temp.y_axis).set(temp.x_axis, ' ');
+		inner = true;
+		alter(temp, ' ');
 		return true;
 	}
 	boolean isClosed(coordinate pos, char dir) {
-		coordinate temp = (translate(pos));;
+		coordinate temp = translate(pos);
 		switch (dir) {
-		case 1://Up
+		case 'w'://Up
 			return (!map.get(temp.y_axis - 1).get(temp.x_axis).equals(' ') && temp.y_axis > 2 ? true : false);
-		case 3://Down
+		case 's'://Down
 			return (!map.get(temp.y_axis + 1).get(temp.x_axis).equals(' ') && temp.y_axis < 12 ? true : false);
-		case 4://Left
+		case 'a'://Left
 			return (!map.get(temp.y_axis).get(temp.x_axis - 1).equals(' ') && temp.x_axis > 2 ? true : false);
-		case 2://Right
-			return (!map.get(temp.y_axis).get(pos.x_axis + 1).equals(' ') && temp.x_axis < 12 ? true : false);
+		case 'd'://Right
+			return (!map.get(temp.y_axis).get(temp.x_axis + 1).equals(' ') && temp.x_axis < 12 ? true : false);
 		default:
 			return false;
 		}
 	}
 	void printLabyrinth(boolean show_walls) {
-		System.out.println("Player: " + pName);
+		//System.out.println("Player: " + pName);
 		char c;
 		for (int i = 0; i < 14; ++i) {
 			for (int j = 0; j < 14; ++j) {
 				c = map.get(i).get(j);
-				System.out.println((i >= 2 && j >= 2) && (c == '|' || c == '=') && !show_walls ? ' ' : c);
+				System.out.print((i >= 2 && j >= 2) && (c == '|' || c == '=') && !show_walls ? ' ' : c);
 			}
 			System.out.println();
 		}
 	}
-	void printRow(int index) {
-		for (int i = 0; i < 14; ++i) {
-			System.out.println(map.get(index).get(i));
-		}
-	}
+//	void printRow(int index) {
+//		for (int i = 0; i < 14; ++i) {
+//			System.out.println(map.get(index).get(i));
+//		}
+//	}
 	coordinate getStart() {
 		coordinate c = new coordinate(this.start);
 		c.y_axis = (c.y_axis / 2) - 1;
@@ -195,7 +225,8 @@ public
 					this.BuildWall(coordinate.make_pair(i, j), 2);
 			}
 		}
-
+		
+		System.out.println("Checking distance");
 		do {
 			start.y_axis = t.nextInt(6);
 			start.x_axis = t.nextInt(6);
@@ -212,15 +243,18 @@ public
 		Grid grid = new Grid();
 		Random t = new Random();
 
+		//System.out.println("Generating Labyrinth");
 		SetupLabyrinth();
 		
 		pos.y_axis = t.nextInt(6);
 		pos.x_axis = t.nextInt(6);
 
 		grid.Open(pos);
+		//System.out.println("Creating paths");
 		while (grid.getClosed().size() > 0) {
+			System.out.println(grid.getClosed().size() + " | " + this.n_walls);
 			dir = 1 + t.nextInt(4);
-			temp.copy(pos);;
+			temp.copy(pos);
 			switch (dir % 2)
 			{
 			case 1:
@@ -233,33 +267,53 @@ public
 				break;
 			}
 			if (grid.getFrontier().contains(temp)) {
+				//System.out.println("Erasing wall");
 				grid.Open(temp);
 				this.EraseWall(pos, dir);
 			}
+			else {
+				//System.out.println("Not in frontier");
+			}
 
-			pos = grid.getRandomOpen();
+			pos.copy(grid.getRandomOpen());
 		}
 
+		//System.out.println("Removing extra walls");
 		while (n_walls > 20) {
 			dir = 1 + t.nextInt(4);
 			pos = grid.getRandomOpen();
 			this.EraseWall(pos, dir);
 		}
 
+		//System.out.println("Finished generating labyrinth | Number of walls: " + this.n_walls);
 		return this.getStart();
 	}
 	void setStart(coordinate pos) {
 		this.start.copy(translate(pos));
+		inner = false;
 		this.alter(pos, 'S');
 	}
 	void setFinish(coordinate pos) {
 		this.finish.copy(translate(pos));
-		this.alter(pos, 'F');
+		inner = false;
+		this.alter(pos, 'f');
 	}
 	void AddDelWall(int condition) {
 		this.n_walls += condition;
 	}
 	int getNofWalls() {
 		return this.n_walls;
+	}
+	
+	public void setGameScreen(GameScreen p_game) {
+		this.game = p_game;
+	}
+	
+	public void SetPlayer(Player p_player) {
+		player = p_player;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 };

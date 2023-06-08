@@ -1,11 +1,15 @@
-import java.util.List;
+import java.util.LinkedList;
 import java.util.*;
 
 class Grid {
-	List<coordinate> closed, open, frontier;
+	LinkedList<coordinate> closed, open, frontier;
 	Room[][] rooms;
 
 	public Grid() {
+		closed = new LinkedList<coordinate>();
+		open = new LinkedList<coordinate>();
+		frontier = new LinkedList<coordinate>();
+		rooms = new Room[6][6];
 		for (int i = 0; i < 6; ++i) {
 			for (int j = 0; j < 6; ++j) {
 				rooms[i][j] = new Room();
@@ -19,27 +23,38 @@ class Grid {
 		rooms[pos.y_axis][pos.x_axis].frontier = false;
 
 		this.open.add(coordinate.make_pair(pos.y_axis, pos.x_axis));
-		this.frontier.remove(pos);
-		this.closed.remove(pos);
+		if (!this.frontier.remove(new coordinate(pos))) {
+			//System.out.println("Not removed from frontier");
+		}
+		if (!this.closed.remove(new coordinate(pos))) {
+			//System.out.println("Not removedfrom closed");
+		}
 
+		//int currSizeF = this.frontier.size();
 		// else-if not used bcs they function separately
+		coordinate temp = new coordinate(pos);
 		if (pos.y_axis > 0 && rooms[pos.y_axis - 1][pos.x_axis].closed == true) {
+			--temp.y_axis;
 			rooms[pos.y_axis - 1][pos.x_axis].frontier = true;
-			this.frontier.add(coordinate.make_pair(pos.y_axis - 1, pos.x_axis));
+			this.frontier.add(new coordinate(temp));
 		}
 		if (pos.y_axis < 5 && rooms[pos.y_axis + 1][pos.x_axis].closed == true) {
+			++temp.y_axis;
 			rooms[pos.y_axis + 1][pos.x_axis].frontier = true;
-			this.frontier.add(coordinate.make_pair(pos.y_axis + 1, pos.x_axis));
+			this.frontier.add(new coordinate(temp));
 		}
 		if (pos.x_axis > 0 && rooms[pos.y_axis][pos.x_axis - 1].closed == true) {
+			--temp.x_axis;
 			rooms[pos.y_axis][pos.x_axis - 1].frontier = true;
-			this.frontier.add(coordinate.make_pair(pos.y_axis, pos.x_axis - 1));
+			this.frontier.add(new coordinate(temp));
 		}
 		if (pos.x_axis < 5 && rooms[pos.y_axis][pos.x_axis + 1].closed == true) {
+			++temp.x_axis;
 			rooms[pos.y_axis][pos.x_axis + 1].frontier = true;
-			this.frontier.add(coordinate.make_pair(pos.y_axis, pos.x_axis + 1));
+			this.frontier.add(new coordinate(temp));
 		}
-
+		//if (this.frontier.size() == currSizeF) {System.out.println("Element not added");}
+		
 		return this.open.size();
 	}
 	List<coordinate> getOpen() {

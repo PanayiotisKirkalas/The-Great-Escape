@@ -4,9 +4,12 @@ import java.util.*;
 import javafx.scene.*;
 import javafx.stage.*;
 import javafx.application.*;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 public class Main extends Application{
-	private static boolean run = true;
+	static GameScreen GS;
+	static Stage myStage;
 	
 	static boolean IntToBool(int x) {
 		return x != 0;
@@ -16,25 +19,25 @@ public class Main extends Application{
 		return (b) ? 1 : 0;
 	}
 
-	static void MainMenu2(boolean go_a, boolean Mode) {
-		char ch;
-		int index = 0, n = 0;
-		String Play = "Play";
+	static void MainMenu2(Stage stage, Scene prev, boolean p_mode) {
+		Mode m = (!p_mode) ? new Mode1() : new Mode2();
 		
 		MainMenuScreen MainMenuScr = new MainMenuScreen();
 		MainMenuScr.SetOption(0, () -> {
-			System.out.println("pressed by builder 1");
+			//System.out.println("pressed by builder 1");
+			m.Play();
 			return "true";
-		}, Play);
+		}, "Play");
 		MainMenuScr.SetOption(1, () -> {
-			System.out.println("pressed by builder 2");
+			//System.out.println("pressed by builder 2");
+			ShowMessage(myStage, m.Explanation);
 			return "true";
-		}, Play);
+		}, "How to play");
 		MainMenuScr.SetOption(2, () -> {
 			System.out.println("pressed by builder 3");
-			MainMenuScr.close();
+			stage.setScene(prev);
 			return "true";
-		}, Play);
+		}, "Back");
 //		if (Boolean.parseBoolean(MainMenuScr.Replay)) Play = Play + " again";
 //		
 //		if (!Mode) {
@@ -68,31 +71,20 @@ public class Main extends Application{
 //		MainMenuScr.SetOption(2, () -> {
 //			return "";
 //		}, "Back");
-		MainMenuScr.show();
+		stage.setScene(MainMenuScr);
 	}
 
 	static void MainMenu(boolean go_a) {
 		MainMenuScreen MainMenuScr = new MainMenuScreen();
-		MainMenuScr.setTitle("The Great Escape");
+		//MainMenuScr.setTitle("The Great Escape");
 		MainMenuScr.SetOption(0, () -> {
 			System.out.println("[DEBUG]1v1");
-			MainMenuScr.hide();
-			MainMenu2(false, false);
-			run = false;
-			System.out.println(run);
-			if (run) {
-				
-			}
-			else 
-				MainMenuScr.show();
+			MainMenu2(myStage, MainMenuScr, false);
 			return "1v1";
 		}, "1v1");
 		MainMenuScr.SetOption(1, () -> {
 			System.out.println("[DEBUG]Battle Royale");
-			MainMenuScr.hide();
-			MainMenu2(false, true);
-			System.out.println("[DEBUG]Battle Royale");
-			MainMenuScr.show();
+			MainMenu2(myStage, MainMenuScr, true);
 			return "Battle Royale";
 		}, "Battle Royale");
 		MainMenuScr.SetOption(2, () -> {
@@ -100,10 +92,31 @@ public class Main extends Application{
 			Platform.exit();
 			return "Quit";
 		}, "Quit");
-		MainMenuScr.show();
+		myStage.setScene(MainMenuScr);
+		myStage.show();
 	}
 
+	
+	public static void setStage(Stage stage) {
+		myStage.hide();
+		stage.show();
+	}
+	
+	public static void ShowMessage(Stage currStage, String message) {
+		MessageScreen msg = new MessageScreen();
+		msg.ShowMsg(message, currStage);
+	}
+	
+	public static String AskUser(Stage currStage, String question) {
+		StringProperty value = new SimpleStringProperty("[DEBUG] Error qs not working");
+		QuestionScreen qs = new QuestionScreen();
+		qs.Ask(question, currStage, value);
+		
+		return value.get();
+	}
+	
 	public void start(Stage primaryStage) {
+		myStage = primaryStage;
 		primaryStage.setResizable(false);
 		MainMenu(false);
 	}

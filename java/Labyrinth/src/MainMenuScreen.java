@@ -2,21 +2,26 @@ import java.util.*;
 import java.io.IOException;
 import java.util.function.*;
 import javafx.scene.*;
-import javafx.stage.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.event.*;
 
-public class MainMenuScreen extends Stage{
+public class MainMenuScreen extends Scene{
 	private ArrayList<Supplier<String>> options; //The Runnable is not meant to be used for Multithreading
 	//private JPanel panel;
 	//@FXML private ArrayList<Button> buttons;
 	public String Replay;
 	@FXML Pane root;
-	@FXML Scene scene;
+	@FXML Button button1;
+	@FXML Button button2;
+	@FXML Button button3;
+	FXMLLoader loader;
 	
 	public MainMenuScreen() {
+		super(new Pane());
+		
+		
 		Replay = new String();
 		options = new ArrayList<Supplier<String>>();
 		//buttons = new ArrayList<Button>();
@@ -29,11 +34,10 @@ public class MainMenuScreen extends Stage{
 		}
 		
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("FXMLs/MainMenuScr.fxml"));
+			loader = new FXMLLoader(getClass().getResource("FXMLs/MainMenuScr.fxml"));
 	        loader.setController(this);
 	        root = loader.load();
-	        scene = new Scene(root);
-	        setScene(scene);
+	        this.setRoot(root);
 		} catch (IOException e) {
 			System.out.print(e.getMessage());
 		}
@@ -46,6 +50,17 @@ public class MainMenuScreen extends Stage{
 //			Replay = function.get();
 //		});
 		options.set(index, function);
+		switch (index) {
+		case 0:
+			button1.setText(ButtonName);
+			break;
+		case 1:
+			button2.setText(ButtonName);
+			break;
+		case 2:
+			button3.setText(ButtonName);
+			break;
+		}
 	}
 	
 //	public void SetTitle(String title) {

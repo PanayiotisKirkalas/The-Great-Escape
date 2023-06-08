@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/19">
+   <children>
+      <Pane prefHeight="63.0" prefWidth="472.0">
+         <children>
+            <TextField fx:id="input" layoutX="272.0" layoutY="19.0" prefHeight="25.0" prefWidth="200.0" promptText="sdhfsehfasf" />
+            <TextArea fx:id="msg" editable="false" prefHeight="63.0" prefWidth="272.0" />
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

@@ -1,12 +1,12 @@
 
 import java.util.*;
 
-class Mode2
+class Mode2 extends Mode
 {
 	private ArrayList<Mode2Player> Players;
+	private Mode2Player currPlayer;
+	private int currPIndex;
 	private ArrayList<Integer> CorpseList;
-
-	public String Explanation;
 
 	Mode2() {
 		Explanation =
@@ -28,6 +28,8 @@ class Mode2
 	}
 	Mode2(int n_Players) {
 		Players.clear();
+		Players = new ArrayList<Mode2Player>(4);
+		CorpseList = new ArrayList<>();
 		for (int i = 0; i < n_Players; ++i) {
 			Players.add(new Mode2Player(i, this));
 		}
@@ -35,41 +37,78 @@ class Mode2
 	void Setup() {
 
 		for (int i = 0; i < Players.size(); ++i) {
-			System.out.print("\033[H\033[2J");//clear screen;
+//			System.out.print("\033[H\033[2J");//clear screen;
 			Players.get(i).askName();
 			Players.get(i).setPos(Players.get(i).getLabyrinth().GenerateLabyrinth());
-			System.out.print("\033[H\033[2J");//clear screen;
-			System.out.println("Next player");
-			System.out.println("Press Enter to continue...");
-			new Scanner(System.in).nextLine();//pause
+//			System.out.print("\033[H\033[2J");//clear screen;
+//			System.out.println("Next player");
+//			System.out.println("Press Enter to continue...");
+//			new Scanner(System.in).nextLine();//pause
 		}
-		System.out.print("\033[H\033[2J");//clear screen;
+//		System.out.print("\033[H\033[2J");//clear screen;
 	}
-	void Play() {
-		//char c;
-		//boolean GameOver = false;
-		int i, result;
-
-		Setup();
-		for (i = 0; (result = Players.get(i).Move(Players)) != -1; i = (i+1) % Players.size()) {
-			//System.out.println("[DEBUG] " + i);
-			if (result != -2) {
-				i = result - 1;
+	
+	Mode2Player MetSomeone(Mode2Player current) {
+		for (Mode2Player p : Players) {
+			if (current.getPos().equals(p.getPos()) && current.getID() != p.getID()) {
+//				System.out.print("\033[H\033[2J");//clear screen
+//				System.out.println("You've met Player: " + p.getName());
+//				new Scanner(System.in).nextLine();//pause
+				return p;
 			}
-			else {
-				System.out.print("\033[H\033[2J");//clear screen;
-				System.out.println("You hit a wall. Give next player");
-				System.out.println("Press enter to continue...");
-				new Scanner(System.in).nextLine();//pause
-			}
-
-			GatherCorpses();
-			System.out.print("\033[H\033[2J");//clear screen;
 		}
-
-		System.out.println('\n' + Players.get(i).getName() + " won!");
-		new Scanner(System.in).nextLine();//pause
-		return;
+		return null;
+	}
+	
+	public void PassToPlayer(char direction) {
+		if (currPlayer.Move(direction) != Player.HIT_WALL) {
+			currPlayer.IncPoints(1);
+			Mode2Player other;
+			if (currPlayer.getPos().equals(currPlayer.getLabyrinth().getFinish())) {
+				//winning
+				Main.ShowMessage(game, "Player " + currPlayer.getName() + " won!!!");
+				game.close();
+			}
+			if ((other = MetSomeone(currPlayer)) != null) {
+				currPlayer.Battle(other);
+			}
+		}
+		else {
+			Main.ShowMessage(game, "You met a wall\nNext player's turn");
+			currPIndex = (currPIndex + 1) % Players.size();
+			currPlayer = Players.get(currPIndex);
+			game.SetPlayer(currPlayer);
+		}
+	}
+	
+	public void Play() {
+		Setup();
+		game.show();
+		game.EnableMovement();
+//		//char c;
+//		//boolean GameOver = false;
+//		int i, result;
+//
+//		Setup();
+//		for (i = 0; (result = Players.get(i).Move(Players)) != -1; i = (i+1) % Players.size()) {
+//			//System.out.println("[DEBUG] " + i);
+//			if (result != -2) {
+//				i = result - 1;
+//			}
+//			else {
+//				System.out.print("\033[H\033[2J");//clear screen;
+//				System.out.println("You hit a wall. Give next player");
+//				System.out.println("Press enter to continue...");
+//				new Scanner(System.in).nextLine();//pause
+//			}
+//
+//			GatherCorpses();
+//			System.out.print("\033[H\033[2J");//clear screen;
+//		}
+//
+//		System.out.println('\n' + Players.get(i).getName() + " won!");
+//		new Scanner(System.in).nextLine();//pause
+//		return;
 	}
 	void ConfirmDeath(int index) {
 		this.CorpseList.add(index);

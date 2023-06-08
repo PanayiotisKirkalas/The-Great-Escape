@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.Scanner;
 
 class Solver {
 	private Stack<Branch> branches;
@@ -6,6 +7,18 @@ class Solver {
 	private Labyrinth l;
 	private boolean checkedRooms[][];
 
+	public Solver(Labyrinth other) {
+		checkedRooms = new boolean[6][6];
+		branches = new Stack<Branch>();
+		pos = other.getStart();
+		l = other;
+		for (int i = 0; i < 6; ++i) {
+			for (int k = 0; k < 6; ++k) {
+				checkedRooms[i][k] = false;
+			}
+		}
+	}
+	
 	private int Move(int dir, boolean on_branch) {
 		if (on_branch) {
 			branches.peek().directions[dir] = false;
@@ -15,16 +28,16 @@ class Solver {
 		checkedRooms[pos.y_axis][pos.x_axis] = true;
 
 		switch (dir) {
-		case 1://Up
+		case 0://Up
 			--pos.y_axis;
 			break;
-		case 2://Right
+		case 1://Right
 			++pos.x_axis;
 			break;
-		case 3://Down
+		case 2://Down
 			++pos.y_axis;
 			break;
-		case 4://Left
+		case 3://Left
 			--pos.x_axis;
 			break;
 		}
@@ -33,18 +46,17 @@ class Solver {
 	}
 	private coordinate calculatePos(coordinate pos, int dir) {
 		coordinate temp = new coordinate(pos);
-		temp = pos;
 		switch (dir) {
-		case 1://Up
+		case 0://Up
 			--temp.y_axis;
 			break;
-		case 2://Right
+		case 1://Right
 			++temp.x_axis;
 			break;
-		case 3://Down
+		case 2://Down
 			++temp.y_axis;
 			break;
-		case 4://Left
+		case 3://Left
 			--temp.x_axis;
 			break;
 		default:
@@ -54,44 +66,65 @@ class Solver {
 		return temp;
 	}
 
-	public Solver(Labyrinth other) {
-		pos = other.getStart();
-		l = other;
-		for (int i = 0; i < 6; ++i) {
-			for (int k = 0; k < 6; ++k) {
-				checkedRooms[i][k] = false;
-			}
-		}
-	}
 	public boolean Solve() {
 		boolean directions[] = { true, true, true, true }, deja_vu = false, close_path = false;
 		char dir[] = { 'w', 'd', 's', 'a' };
 		int openDir = 4, openDirN = 4, prev = -1;
 		coordinate temp = new coordinate();
 
+		if (l.getNofWalls() > 20) {
+			return false;
+		}
+		
 		while (true) {
 			openDirN = 4;
 
-			if (this.pos == l.getFinish())
+			if (this.pos.equals(l.getFinish()))
 				return true;
+			System.out.println("Current pos: " + (char)('A' + pos.y_axis) + "" + (pos.x_axis + 1));
+			System.out.println("Final pos: " + (char)('A' + l.getFinish().y_axis) + "" + (l.getFinish().x_axis + 1));
 
 			for (int i = 0; i < 4; ++i) {
+				close_path = false;
+				//System.out.println("Position: " + (char)('A' + pos.y_axis) + "" + (pos.x_axis + 1));
 				temp = calculatePos(pos, i);
-				if (checkedRooms[temp.y_axis][temp.x_axis])
+				//System.out.println("iteration: " + i + " y:" + (char)('A' + temp.y_axis) + "/x:" + temp.x_axis);
+				if (i == 0 && pos.y_axis <= 0) {
 					close_path = true;
-				else if (!directions[i])
+					//System.out.println("Above is closed");
+				}
+				else if (i == 1 && pos.x_axis >= 5){
 					close_path = true;
-				else if (l.isClosed(this.pos, dir[i]) || i == prev) 
+					//System.out.println("Right is closed");
+				}
+				else if (i == 2 && pos.y_axis >= 5){
 					close_path = true;
-				else if (i == 0 && pos.y_axis <= 0)
+					//System.out.println("Below is closed");
+				}
+				else if (i == 3 && pos.x_axis <= 0){
 					close_path = true;
-				else if (i == 1 && pos.x_axis >= 5)
+					//System.out.println("Left is closed");
+				}
+				else if (i == prev) {
 					close_path = true;
-				else if (i == 2 && pos.y_axis >= 5)
+					//System.out.println("Came from" + i);
+				}
+				else if (!directions[i]){
 					close_path = true;
-				else if (i == 3 && pos.x_axis <= 0)
+					//System.out.println("Direction: " + i + " is already closed");
+				}
+				else if (l.isClosed(this.pos, dir[i])) {
 					close_path = true;
-
+					//System.out.println("Direction: " + i + " is closed");
+				}
+				else if (checkedRooms[temp.y_axis][temp.x_axis]) {
+					close_path = true;
+					//System.out.println("Has already been here");
+				}
+				else {
+					//System.out.println("Direction: " + i + " is open");
+				}
+				
 				if (close_path) {
 					directions[i] = false;
 					--openDirN;
@@ -101,17 +134,22 @@ class Solver {
 			
 			}
 
+			//System.out.println("N of open paths: " + openDirN + " | Selected path: " + openDir + '\n');
+			
 			
 			if (openDirN == 0) {
-				if (branches.empty())
+//				System.out.println("N of open paths: " + branches.peek().openDirN + " | N of Branches: " + branches.size());
+//				System.out.println("Branch Position: " + (char)('A' + branches.peek().pos.y_axis) + "/" + branches.peek().pos.x_axis);
+				if (branches.isEmpty())
 					return false;
-				if (pos == branches.peek().pos) {
+				if (pos.equals(branches.peek().pos)) {
 					branches.pop();
 				}
-				if (branches.empty())
+				if (branches.isEmpty())
 					return false;
 
-				pos = branches.peek().pos;
+				//pos = branches.peek().pos;
+				pos.copy(branches.peek().pos);
 				openDirN = branches.peek().openDirN;
 				for (int i = 0; i < 4; ++i) {
 					directions[i] = branches.peek().directions[i];
@@ -120,23 +158,28 @@ class Solver {
 				prev = -1;
 			}
 			else if (openDirN == 1) {
-				prev = Move(openDir, (branches.empty() ? false : pos == branches.peek().pos));
+				prev = Move(openDir, (branches.empty() ? false : pos.equals(branches.peek().pos)));
 
 				for (int i = 0; i < 4; ++i) {
 					directions[i] = true;
 				}
-
+				directions[prev] = false;
+				
 				deja_vu = false;
 			}
 			else if (openDirN > 1) {
 				if (!deja_vu) {
 					branches.push(new Branch());
-					branches.peek().pos = this.pos;
+					//branches.peek().pos = this.pos;
+					branches.peek().pos.copy(this.pos);
 					for (int i = 0; i < 4; ++i) {
 						branches.peek().directions[i] = directions[i];
 					}
-					branches.peek().directions[prev] = false;
-					--branches.peek().openDirN;
+					
+					if (prev > -1) {
+						branches.peek().directions[prev] = false;
+						--branches.peek().openDirN;
+					}
 				}
 				else 
 					deja_vu = false;

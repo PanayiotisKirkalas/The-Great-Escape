@@ -20,4 +20,10 @@ public class coordinate {
 		temp.x_axis = x;
 		return temp;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		coordinate other = (coordinate)obj;
+		return this.y_axis == other.y_axis && this.x_axis == other.x_axis;
+	}
 }

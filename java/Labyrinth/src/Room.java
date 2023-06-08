@@ -1,9 +1,9 @@
 
 public class Room {
-	boolean open, frontier, closed;
+	public boolean open, frontier, closed;
 	Room() {
 		open = false;
 		frontier = false;
-		closed = false;
+		closed = true;
 	}
 };
