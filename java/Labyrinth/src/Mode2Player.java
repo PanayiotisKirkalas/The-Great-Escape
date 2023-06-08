@@ -20,7 +20,7 @@ class Mode2Player extends Player {
 //		}
 //		return null;
 //	}
-	int Battle(Mode2Player p) {
+	public Mode2Player Battle(Mode2Player p) {
 		int bet1, bet2;
 
 		bet1 = Bet(this);
@@ -41,7 +41,7 @@ class Mode2Player extends Player {
 //			System.out.print("Press enter to contiue...");
 //			new Scanner(System.in).nextLine();//pause
 			Main.ShowMessage(game, "Draw!!!\n" + p.getName() + "'s turn");
-	 		return p.getID();
+	 		return p;
 		default:
 			String msg = new String();
 			switch (Integer.compare(bet1, bet2))
@@ -50,17 +50,20 @@ class Mode2Player extends Player {
 				// player 2 loses
 //				System.out.println("Player " + p.getName() + " lost battle");
 				msg = "Player " + p.getName() + " lost battle\n";
-				if (p.LoseLife() == 0) {
+				if (p.LoseLife() <= 0) {
 					m2.ConfirmDeath(p.getID());
 //					System.out.print("Player " + p.getName() + " lost the game");
 					msg += "Player " + p.getName() + " lost the game\n";
+				}
+				else {
+					System.out.println("Loser's lifes: " + p.getLives());
 				}
 				msg += this.Name + "'s turn\n";
 				Main.ShowMessage(game, msg);
 //				System.out.println(this.Name + "'s turn");
 //				System.out.print("Press enter to contiue...");
 //				new Scanner(System.in).nextLine();//pause
-				return this.id;
+				return null;
 			default:
 				// player 1 loses
 				System.out.println("Player " + this.Name + " lost battle");
@@ -70,9 +73,12 @@ class Mode2Player extends Player {
 //					System.out.print("Player " + p.getName() + " lost the game");
 					msg += "Player " + this.getName() + " lost the game\n";
 				}
+				else {
+					System.out.println("Loser's lifes: " + p.getLives());
+				}
 				msg += p.Name + "'s turn\n";
 				Main.ShowMessage(game, msg);
-				return p.getID();
+				return p;
 			}
 		}
 	}
@@ -100,7 +106,7 @@ class Mode2Player extends Player {
 	public Mode2Player() {
 		super(-1, null);
 		points = 0;
-		lives = 2;
+		lives = 1;
 		dead = false;
 		m2 = null;
 	}
@@ -115,6 +121,9 @@ class Mode2Player extends Player {
 	public int getPoints() {
 		return this.points;
 	}
+	public int getLives() {
+		return this.lives;
+	}
 	public void IncPoints(int value) {
 		this.points += value;
 	}
@@ -123,82 +132,8 @@ class Mode2Player extends Player {
 	}
 	public int LoseLife() {
 		--(this.lives);
-		if (this.lives == 0)
-			this.dead = true;
+		this.dead = this.lives <= 0;
 
 		return this.lives;
-	}
-	
-	public int Move(char direction) {
-//		char c;
-//		Mode2Player p;
-
-		if (this.dead)
-			return this.id + 1;
-
-		this.Own.alter(this.pos, this.symbol);
-//		this.Own.printLabyrinth(!Labyrinth.show_walls);
-//		System.out.println("Your points: " + this.points);
-//
-//		c = KeyEvent.KEY_PRESSED;
-
-		if (!this.Own.isClosed(this.pos, direction)) {
-			switch (direction)
-			{
-			case KEY_UP:
-				if (this.pos.y_axis > 0) {
-					this.Own.alter(this.pos, '^');
-					this.pos.y_axis -= 1;
-				}
-				else
-					this.DecPoints(1);
-				break;
-			case KEY_DOWN:
-				if (this.pos.y_axis < 5) {
-					this.Own.alter(this.pos, 'V');
-					this.pos.y_axis += 1;
-				}
-				else
-					this.DecPoints(1);
-				break;
-			case KEY_LEFT:
-				if (this.pos.x_axis > 0) {
-					this.Own.alter(this.pos, '<');
-					this.pos.x_axis -= 1;
-				}
-				else
-					this.DecPoints(1);
-				break;
-			case KEY_RIGHT:
-				if (this.pos.x_axis < 5) {
-					this.Own.alter(this.pos, '>');
-					this.pos.x_axis += 1;
-				}
-				else
-					this.DecPoints(1);
-				break;
-			default:
-				this.DecPoints(1);
-			}
-
-//			this.IncPoints(1);
-			this.Own.alter(this.pos, this.symbol);
-			return 0;
-//			System.out.print("\033[H\033[2J");//clear screen;
-//			this.Own.printLabyrinth(!Labyrinth.show_walls);
-//			System.out.println("Your points: " + this.points);
-
-//			if ((p = MetSomeone(v)) != null) {
-//				return Battle(p);
-//			}
-//
-//			if (this.pos == this.Own.getFinish()) {
-//				return -1;
-//			}
-//
-//			c = KeyEvent.KEY_PRESSED;
-		}
-
-		return HIT_WALL;
 	}
 };

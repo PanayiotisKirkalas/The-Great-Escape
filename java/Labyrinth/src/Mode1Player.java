@@ -117,48 +117,4 @@ public class Mode1Player extends Player {
 		Own.printLabyrinth(true);
 		game.Update();
 	}
-	
-	public int Move(char direction)
-	{
-		Own.alter(this.pos, this.symbol);
-//		Own.printLabyrinth(DONT_SHOW_WALLS);
-		
-		if(!Own.isClosed(this.pos, direction))
-		{
-			switch (direction)
-			{
-				case KEY_UP:
-					if (this.pos.y_axis > 0) {
-						//Own.alter(this.pos, PLAYER_UP);
-						this.pos.y_axis -= 1;
-					}
-					break;
-				case KEY_DOWN:
-					if (this.pos.y_axis < 5) {
-						//Own.alter(this.pos, PLAYER_DOWN);
-						this.pos.y_axis += 1;
-					}
-					break;
-				case KEY_LEFT:
-					if (this.pos.x_axis > 0) {
-						//Own.alter(this.pos, PLAYER_LEFT);
-						this.pos.x_axis -= 1;
-					}
-					break;
-				case KEY_RIGHT:
-					if (this.pos.x_axis < 5) {
-						//Own.alter(this.pos, PLAYER_RIGHT);
-						this.pos.x_axis += 1;
-					}
-					break;
-			}
-			
-			Own.alter(this.pos, this.symbol);
-//			Own.printLabyrinth(DONT_SHOW_WALLS);
-			return 0;
-			//if (this.pos == Own.getFinish()) return WON;
-		}
-		return HIT_WALL;
-	}
-
 }

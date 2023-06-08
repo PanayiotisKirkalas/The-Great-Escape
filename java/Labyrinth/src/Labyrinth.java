@@ -98,7 +98,7 @@ public
 	
 	void alter(coordinate pos, char c) {
 		coordinate temp = (inner) ? (pos) : translate(pos);
-		System.out.println("[DEBUG] " + pos.y_axis + "/" + pos.x_axis);
+		//System.out.println("[DEBUG] " + pos.y_axis + "/" + pos.x_axis);
 		map.get(temp.y_axis).set(temp.x_axis, c);
 		temp = (!inner) ? translate(pos) : temp;
 		game.Alter(temp, c);
@@ -252,7 +252,7 @@ public
 		grid.Open(pos);
 		//System.out.println("Creating paths");
 		while (grid.getClosed().size() > 0) {
-			System.out.println(grid.getClosed().size() + " | " + this.n_walls);
+			//System.out.println(grid.getClosed().size() + " | " + this.n_walls);
 			dir = 1 + t.nextInt(4);
 			temp.copy(pos);
 			switch (dir % 2)

@@ -4,7 +4,6 @@ import java.lang.*;
 class Mode1 extends Mode
 {
 	private Mode1Player P[] = new Mode1Player[2];
-	private GameScreen game;
 	private int currPIndex;
 
 	public Mode1() {

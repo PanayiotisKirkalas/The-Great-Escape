@@ -81,8 +81,8 @@ class Solver {
 
 			if (this.pos.equals(l.getFinish()))
 				return true;
-			System.out.println("Current pos: " + (char)('A' + pos.y_axis) + "" + (pos.x_axis + 1));
-			System.out.println("Final pos: " + (char)('A' + l.getFinish().y_axis) + "" + (l.getFinish().x_axis + 1));
+			//System.out.println("Current pos: " + (char)('A' + pos.y_axis) + "" + (pos.x_axis + 1));
+			//System.out.println("Final pos: " + (char)('A' + l.getFinish().y_axis) + "" + (l.getFinish().x_axis + 1));
 
 			for (int i = 0; i < 4; ++i) {
 				close_path = false;

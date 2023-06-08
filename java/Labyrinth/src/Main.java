@@ -110,7 +110,10 @@ public class Main extends Application{
 	public static String AskUser(Stage currStage, String question) {
 		StringProperty value = new SimpleStringProperty("[DEBUG] Error qs not working");
 		QuestionScreen qs = new QuestionScreen();
-		qs.Ask(question, currStage, value);
+		if (currStage == null)
+			qs.Ask(question, myStage, value);
+		else
+			qs.Ask(question, currStage, value);
 		
 		return value.get();
 	}

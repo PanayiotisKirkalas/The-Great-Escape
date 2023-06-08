@@ -9,6 +9,8 @@ class Mode2 extends Mode
 	private ArrayList<Integer> CorpseList;
 
 	Mode2() {
+		Players = new ArrayList<Mode2Player>();
+		CorpseList = new ArrayList<>();
 		Explanation =
 				"How to play:\n\n"+
 				"All the players take turns to move through randomly generated labyrinths with invisible walls.\n"+
@@ -26,19 +28,30 @@ class Mode2 extends Mode
 				"\nPress Enter to go back"
 				;
 	}
-	Mode2(int n_Players) {
+	private void SetPlayers(int n_Players) {
 		Players.clear();
-		Players = new ArrayList<Mode2Player>(4);
+		Players = new ArrayList<Mode2Player>(n_Players);
 		CorpseList = new ArrayList<>();
 		for (int i = 0; i < n_Players; ++i) {
 			Players.add(new Mode2Player(i, this));
 		}
+		game = new GameScreen(Players.get(0), this);
 	}
 	void Setup() {
-
+		int n;
+		
+		do {
+			n = Integer.parseInt(Main.AskUser(null, "Number of players(2 to 4)? "));
+		} while (n < 2 || n > 4);
+		
+		this.SetPlayers(n);
+		currPlayer = Players.get(0);
+		currPIndex = 0;
 		for (int i = 0; i < Players.size(); ++i) {
 //			System.out.print("\033[H\033[2J");//clear screen;
+			Players.get(i).setGameScreen(game);
 			Players.get(i).askName();
+			game.SetPlayer(Players.get(i));
 			Players.get(i).setPos(Players.get(i).getLabyrinth().GenerateLabyrinth());
 //			System.out.print("\033[H\033[2J");//clear screen;
 //			System.out.println("Next player");
@@ -54,35 +67,49 @@ class Mode2 extends Mode
 //				System.out.print("\033[H\033[2J");//clear screen
 //				System.out.println("You've met Player: " + p.getName());
 //				new Scanner(System.in).nextLine();//pause
-				return p;
+				if (!p.dead) return p;
 			}
 		}
 		return null;
 	}
 	
 	public void PassToPlayer(char direction) {
+		coordinate temp = new coordinate(currPlayer.getPos());
+		Mode2Player other;
 		if (currPlayer.Move(direction) != Player.HIT_WALL) {
-			currPlayer.IncPoints(1);
-			Mode2Player other;
-			if (currPlayer.getPos().equals(currPlayer.getLabyrinth().getFinish())) {
+			if (!temp.equals(currPlayer.getPos()))
+				currPlayer.IncPoints(1);
+			
+			if (currPlayer.getPos().equals(currPlayer.getLabyrinth().getFinish()) || Players.size() == 1) {
 				//winning
 				Main.ShowMessage(game, "Player " + currPlayer.getName() + " won!!!");
 				game.close();
 			}
 			if ((other = MetSomeone(currPlayer)) != null) {
-				currPlayer.Battle(other);
+				if (currPlayer.Battle(other) != null) {
+					//Main.ShowMessage(game, "\nNext player's turn");
+					do {
+						currPIndex = (currPIndex + 1) % Players.size();
+						currPlayer = Players.get(currPIndex);
+					} while (currPlayer.dead);
+					game.SetPlayer(currPlayer);
+				}
 			}
 		}
 		else {
 			Main.ShowMessage(game, "You met a wall\nNext player's turn");
-			currPIndex = (currPIndex + 1) % Players.size();
-			currPlayer = Players.get(currPIndex);
+			do {
+				currPIndex = (currPIndex + 1) % Players.size();
+				currPlayer = Players.get(currPIndex);
+			} while (currPlayer.dead);
 			game.SetPlayer(currPlayer);
 		}
 	}
 	
 	public void Play() {
 		Setup();
+		game.SetPlayer(Players.get(0));
+		game.WallVisibility(false);
 		game.show();
 		game.EnableMovement();
 //		//char c;
@@ -112,6 +139,7 @@ class Mode2 extends Mode
 	}
 	void ConfirmDeath(int index) {
 		this.CorpseList.add(index);
+		this.Players.remove(index);
 	}
 	void GatherCorpses() {
 		for (int i : this.CorpseList)

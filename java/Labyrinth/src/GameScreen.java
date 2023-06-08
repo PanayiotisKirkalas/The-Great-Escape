@@ -22,6 +22,7 @@ public class GameScreen extends Stage {
 	static public final char corner_wall = '+';
 	static public final char start = 'S';
 	static public final char finish = 'f';
+	static public final char prev = 'p';
 	static public final char[] top = {'1', '2', '3', '4', '5', '6'};
 	static public final char[] side = {'A', 'B', 'C', 'D', 'E', 'F'};
 	
@@ -62,6 +63,9 @@ public class GameScreen extends Stage {
 	public void Alter(coordinate pos, char state) {
 		Image image;
 		switch (state) {
+		case prev:
+			image = new Image(getClass().getResourceAsStream("resources/prev.png"));
+			break;
 		case player:
 			image = new Image(getClass().getResourceAsStream("resources/player.png"));
 			break;
