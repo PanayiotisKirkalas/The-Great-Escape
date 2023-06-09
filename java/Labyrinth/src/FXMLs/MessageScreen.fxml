@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="421.0" prefWidth="605.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="406.0" prefWidth="319.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <TextArea fx:id="msg" editable="false" prefHeight="421.0" prefWidth="605.0" text="&quot;How to play:\n\n&quot;+&quot;\tBoth players will make a labyrinth for the other to solve. There is the option to let the program randomly\n&quot;+&quot;\tgenerate a labyrinth\n&quot;+&quot;\tBoth players take turns to move through the labyrinths each one made for the other with invisible walls.\n&quot;+&quot;\nHow to move:\n&quot;+&quot;\tUP: W\n&quot;+&quot;\tDOWN: S\n&quot;+&quot;\tLEFT: A\n&quot;+&quot;\tRIGHT: D\n&quot;+&quot;\nHow to Build:\n&quot;+&quot;\tYou enter the coordinates of the block you want to add a wall around (e.g. E5)\n&quot;+&quot;\tand then the direction that you want to build towards, the direction is inputed the same way you move&quot;+&quot;\tYou can enter up to 20 walls\n&quot;+&quot;\nPress Enter to go back&quot;&quot;How to play:\n\n&quot;+&quot;\tBoth players will make a labyrinth for the other to solve. There is the option to let the program randomly\n&quot;+&quot;\tgenerate a labyrinth\n&quot;+&quot;\tBoth players take turns to move through the labyrinths each one made for the other with invisible walls.\n&quot;+&quot;\nHow to move:\n&quot;+&quot;\tUP: W\n&quot;+&quot;\tDOWN: S\n&quot;+&quot;\tLEFT: A\n&quot;+&quot;\tRIGHT: D\n&quot;+&quot;\nHow to Build:\n&quot;+&quot;\tYou enter the coordinates of the block you want to add a wall around (e.g. E5)\n&quot;+&quot;\tand then the direction that you want to build towards, the direction is inputed the same way you move&quot;+&quot;\tYou can enter up to 20 walls\n&quot;+&quot;\nPress Enter to go back&quot;&quot;How to play:\n\n&quot;+&quot;\tBoth players will make a labyrinth for the other to solve. There is the option to let the program randomly\n&quot;+&quot;\tgenerate a labyrinth\n&quot;+&quot;\tBoth players take turns to move through the labyrinths each one made for the other with invisible walls.\n&quot;+&quot;\nHow to move:\n&quot;+&quot;\tUP: W\n&quot;+&quot;\tDOWN: S\n&quot;+&quot;\tLEFT: A\n&quot;+&quot;\tRIGHT: D\n&quot;+&quot;\nHow to Build:\n&quot;+&quot;\tYou enter the coordinates of the block you want to add a wall around (e.g. E5)\n&quot;+&quot;\tand then the direction that you want to build towards, the direction is inputed the same way you move&quot;+&quot;\tYou can enter up to 20 walls\n&quot;+&quot;\nPress Enter to go back&quot;" wrapText="true" />
-      <Button fx:id="back" layoutX="277.0" layoutY="357.0" mnemonicParsing="false" text="Button" />
+      <StackPane layoutX="-30.0" layoutY="-8.0" prefHeight="422.0" prefWidth="355.0">
+         <children>
+            <ImageView fitHeight="430.0" fitWidth="349.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../resources/message.png" />
+               </image>
+            </ImageView>
+            <Text fx:id="msg" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+         </children>
+      </StackPane>
+      <Button fx:id="back" layoutX="134.0" layoutY="367.0" mnemonicParsing="false" text="Button" />
    </children>
 </AnchorPane>

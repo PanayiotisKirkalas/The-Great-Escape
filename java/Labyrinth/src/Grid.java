@@ -23,15 +23,9 @@ class Grid {
 		rooms[pos.y_axis][pos.x_axis].frontier = false;
 
 		this.open.add(coordinate.make_pair(pos.y_axis, pos.x_axis));
-		if (!this.frontier.remove(new coordinate(pos))) {
-			//System.out.println("Not removed from frontier");
-		}
-		if (!this.closed.remove(new coordinate(pos))) {
-			//System.out.println("Not removedfrom closed");
-		}
+		this.frontier.remove(new coordinate(pos));
+		this.closed.remove(new coordinate(pos));
 
-		//int currSizeF = this.frontier.size();
-		// else-if not used bcs they function separately
 		coordinate temp = new coordinate(pos);
 		if (pos.y_axis > 0 && rooms[pos.y_axis - 1][pos.x_axis].closed == true) {
 			--temp.y_axis;
@@ -53,7 +47,6 @@ class Grid {
 			rooms[pos.y_axis][pos.x_axis + 1].frontier = true;
 			this.frontier.add(new coordinate(temp));
 		}
-		//if (this.frontier.size() == currSizeF) {System.out.println("Element not added");}
 		
 		return this.open.size();
 	}

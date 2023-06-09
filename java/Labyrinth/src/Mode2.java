@@ -6,26 +6,32 @@ class Mode2 extends Mode
 	private ArrayList<Mode2Player> Players;
 	private Mode2Player currPlayer;
 	private int currPIndex;
-	private ArrayList<Integer> CorpseList;
+	private ArrayList<Mode2Player> CorpseList;
 
 	Mode2() {
 		Players = new ArrayList<Mode2Player>();
-		CorpseList = new ArrayList<>();
+		CorpseList = new ArrayList<Mode2Player>();
 		Explanation =
 				"How to play:\n\n"+
-				"All the players take turns to move through randomly generated labyrinths with invisible walls.\n"+
-				"A player loses their turn when they hit a wall. Every time you move and don't hit a wall, you gain one point,\n"+
-				"if you meet another player, both of you will have to bet an amount of points. It will then be the bet's winner turn\n"+
-				"to move and the loser will lose 1HP (each player starts with 2HP), if there is draw, it will also be the other\n"+
-				"player's turn. Each side will lose the points they used.\n"+
-				"A player wins if they are the only one left or if they reach the finish of the labyrinth (F).\n"+
-				"A player loses if someone reaches the finish before them or if they lose all their lives (everyone starts with 2)\n"+
+				"All the players take turns to move\n"+ 
+				"through randomly generated labyrinths\n"+ 
+				"with invisible walls.\n"+
+				"For every succesful move\n"+ 
+				"you gain one point,\n"+
+				"if you meet another player\n"+ 
+				"both of you will bet an amount of points.\n"+ 
+				"It will then be the bet winner's turn\n"+
+				"to move and the loser will lose 1HP\n"+ 
+				"Each side will lose the points they used.\n"+
+				"To win you need:\n"+
+				"1.To be the only one left.\n"+
+				"2.Solve the labyrinth.\n"+
+				"Everyone else loses\n"+
 				"How to move:\n"+
-				"\tUP: W\n"+
+				"UP: W"+
 				"\tDOWN: S\n"+
-				"\tLEFT: A\n"+
-				"\tRIGHT: D\n"+
-				"\nPress Enter to go back"
+				"LEFT: A"+
+				"\tRIGHT: D\n"
 				;
 	}
 	private void SetPlayers(int n_Players) {
@@ -37,6 +43,7 @@ class Mode2 extends Mode
 		}
 		game = new GameScreen(Players.get(0), this);
 	}
+	
 	void Setup() {
 		int n;
 		
@@ -48,25 +55,16 @@ class Mode2 extends Mode
 		currPlayer = Players.get(0);
 		currPIndex = 0;
 		for (int i = 0; i < Players.size(); ++i) {
-//			System.out.print("\033[H\033[2J");//clear screen;
 			Players.get(i).setGameScreen(game);
 			Players.get(i).askName();
 			game.SetPlayer(Players.get(i));
 			Players.get(i).setPos(Players.get(i).getLabyrinth().GenerateLabyrinth());
-//			System.out.print("\033[H\033[2J");//clear screen;
-//			System.out.println("Next player");
-//			System.out.println("Press Enter to continue...");
-//			new Scanner(System.in).nextLine();//pause
 		}
-//		System.out.print("\033[H\033[2J");//clear screen;
 	}
 	
 	Mode2Player MetSomeone(Mode2Player current) {
 		for (Mode2Player p : Players) {
 			if (current.getPos().equals(p.getPos()) && current.getID() != p.getID()) {
-//				System.out.print("\033[H\033[2J");//clear screen
-//				System.out.println("You've met Player: " + p.getName());
-//				new Scanner(System.in).nextLine();//pause
 				if (!p.dead) return p;
 			}
 		}
@@ -84,14 +82,13 @@ class Mode2 extends Mode
 				//winning
 				Main.ShowMessage(game, "Player " + currPlayer.getName() + " won!!!");
 				game.close();
+				return;
 			}
 			if ((other = MetSomeone(currPlayer)) != null) {
 				if (currPlayer.Battle(other) != null) {
 					//Main.ShowMessage(game, "\nNext player's turn");
-					do {
-						currPIndex = (currPIndex + 1) % Players.size();
-						currPlayer = Players.get(currPIndex);
-					} while (currPlayer.dead);
+					currPIndex = Players.indexOf(other);
+					currPlayer = other;
 					game.SetPlayer(currPlayer);
 				}
 			}
@@ -112,38 +109,9 @@ class Mode2 extends Mode
 		game.WallVisibility(false);
 		game.show();
 		game.EnableMovement();
-//		//char c;
-//		//boolean GameOver = false;
-//		int i, result;
-//
-//		Setup();
-//		for (i = 0; (result = Players.get(i).Move(Players)) != -1; i = (i+1) % Players.size()) {
-//			//System.out.println("[DEBUG] " + i);
-//			if (result != -2) {
-//				i = result - 1;
-//			}
-//			else {
-//				System.out.print("\033[H\033[2J");//clear screen;
-//				System.out.println("You hit a wall. Give next player");
-//				System.out.println("Press enter to continue...");
-//				new Scanner(System.in).nextLine();//pause
-//			}
-//
-//			GatherCorpses();
-//			System.out.print("\033[H\033[2J");//clear screen;
-//		}
-//
-//		System.out.println('\n' + Players.get(i).getName() + " won!");
-//		new Scanner(System.in).nextLine();//pause
-//		return;
 	}
-	void ConfirmDeath(int index) {
-		this.CorpseList.add(index);
-		this.Players.remove(index);
-	}
-	void GatherCorpses() {
-		for (int i : this.CorpseList)
-			this.CorpseList.remove(i);
-		this.CorpseList.clear();
+	void ConfirmDeath(Mode2Player corpse) {
+		this.CorpseList.add(corpse);
+		this.Players.remove(corpse);
 	}
 };

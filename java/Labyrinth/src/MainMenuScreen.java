@@ -8,9 +8,8 @@ import javafx.scene.layout.*;
 import javafx.event.*;
 
 public class MainMenuScreen extends Scene{
-	private ArrayList<Supplier<String>> options; //The Runnable is not meant to be used for Multithreading
-	//private JPanel panel;
-	//@FXML private ArrayList<Button> buttons;
+	private ArrayList<Supplier<String>> options; //Supplier is used to store a function that takes no arguments and returns a value, in this case
+												 //of type String. It is used to add functionalities to buttons dynamically
 	public String Replay;
 	@FXML Pane root;
 	@FXML Button button1;
@@ -24,13 +23,8 @@ public class MainMenuScreen extends Scene{
 		
 		Replay = new String();
 		options = new ArrayList<Supplier<String>>();
-		//buttons = new ArrayList<Button>();
 		for (int i = 0; i < 3; ++i) {
 			options.add(() -> {return "";});
-			//buttons.add(new Button());
-//			buttons.get(i).setOnAction(e -> {
-//				System.out.println("[DEBUG] pressed");
-//			});
 		}
 		
 		try {
@@ -44,11 +38,6 @@ public class MainMenuScreen extends Scene{
 	}
 	
 	public void SetOption(int index, Supplier<String> function, String ButtonName) {
-//		buttons.get(index).setText("test");
-//		buttons.get(index).setOnAction(e -> {
-//			System.out.println("[DEBUG] pressed");
-//			Replay = function.get();
-//		});
 		options.set(index, function);
 		switch (index) {
 		case 0:
@@ -62,10 +51,6 @@ public class MainMenuScreen extends Scene{
 			break;
 		}
 	}
-	
-//	public void SetTitle(String title) {
-//		SetTitle(title);
-//	}
 	
 	@FXML
 	public void option1(ActionEvent e) {
@@ -82,60 +67,4 @@ public class MainMenuScreen extends Scene{
 		e.consume();
 		Replay = options.get(2).get();
 	}
-	
-//	@Override
-//	public void start(Stage primaryStage) {
-//		primaryStage.setScene(scene);
-////		ImageIcon background = new ImageIcon("resources/Labyrinth_Background_pixelart.png");
-////		JLabel label = new JLabel("", background, JLabel.CENTER);
-////		
-////		label.setBounds(0, 0, getWidth(), getHeight());
-////		setLayout(new OverlayLayout(panel));
-////		panel = new JPanel();
-////		panel.add(label);
-////		for (int i = 0; i < 3; ++i)
-////			panel.add(buttons.get(i));
-////		setContentPane(panel);
-//		
-////		buttons.get(0).addActionListener(new ActionListener() {
-////			public void actionPerformed(ActionEvent e) {
-////				setVisible(false);
-////				Replay = options.get(0).get();
-////			}
-////		});
-////		buttons.get(1).addActionListener(new ActionListener() {
-////			public void actionPerformed(ActionEvent e) {
-////				setVisible(false);
-////				Replay = options.get(1).get();
-////			}
-////		});
-////		
-////		buttons.get(2).addActionListener(new ActionListener() {
-////			public void actionPerformed(ActionEvent e) {
-////				setVisible(true);
-////				Replay = options.get(2).get();
-////			}
-////		});
-//		buttons.get(0).setOnAction(new EventHandler<ActionEvent>() {
-//			public void handle(ActionEvent e) {
-//				primaryStage.hide();
-//				Replay = options.get(0).get();
-//			}
-//		});
-//		buttons.get(1).setOnAction(new EventHandler<ActionEvent>() {
-//			public void handle(ActionEvent e) {
-//				primaryStage.hide();
-//				Replay = options.get(1).get();
-//			}
-//		});
-//		buttons.get(2).setOnAction(new EventHandler<ActionEvent>() {
-//			public void handle(ActionEvent e) {
-//				primaryStage.hide();
-//				Replay = options.get(2).get();
-//			}
-//		});
-//		
-//		primaryStage.show();
-//		
-//	}
 }

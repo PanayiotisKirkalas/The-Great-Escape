@@ -1,16 +1,11 @@
-import java.util.*;
 import java.io.IOException;
-import java.util.function.*;
 import javafx.scene.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.event.*;
 import javafx.stage.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
 public class GameScreen extends Stage {
@@ -57,6 +52,10 @@ public class GameScreen extends Stage {
 		myLabyrinth = p_player.getLabyrinth();
 		myPlayer = p_player;
 		
+		this.setOnCloseRequest(event -> {
+            event.consume(); // Consume the event to prevent default handling
+        });
+		
 		this.setResizable(false);
 	}
 	
@@ -81,14 +80,8 @@ public class GameScreen extends Stage {
 		case unseen:
 			image = new Image(getClass().getResourceAsStream("resources/unseen.png"));
 			break;
-		case h_wall:
-			image = new Image(getClass().getResourceAsStream("resources/horizontal_wall.png"));
-			break;
-		case v_wall:
-			image = new Image(getClass().getResourceAsStream("resources/vertical_wall.png"));
-			break;
-		case corner_wall:
-			image = new Image(getClass().getResourceAsStream("resources/corner_wall.png"));
+		case h_wall: case v_wall: case corner_wall:
+			image = new Image(getClass().getResourceAsStream("resources/wall.png"));
 			break;
 		default:
 			if ((state >= top[0] && state <= top[5]) || (state >= side[0] && state <= side[5])) {
@@ -129,7 +122,6 @@ public class GameScreen extends Stage {
 	}
 	
 	public void SetPlayer(Player p_player) {
-		//myLabyrinth = p_player.getLabyrinth();
 		myPlayer = p_player;
 		pName.setText(myPlayer.getName());
 		SetLabyrinth(myPlayer.getLabyrinth());

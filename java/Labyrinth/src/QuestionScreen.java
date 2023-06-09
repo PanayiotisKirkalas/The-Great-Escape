@@ -1,21 +1,14 @@
-import java.util.*;
 import java.io.IOException;
-import java.util.function.*;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.event.*;
 import javafx.stage.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.text.*;
 
 public class QuestionScreen extends Stage{
-	@FXML private TextArea msg;
+	@FXML private Text msg;
 	@FXML private TextField input;
 	@FXML private Pane root;
 	private FXMLLoader loader;
@@ -40,6 +33,10 @@ public class QuestionScreen extends Stage{
 			value.set(input.getText());
 			this.close();
 		});
+		
+		this.setOnCloseRequest(event -> {
+            event.consume(); // Consume the event to prevent default handling
+        });
 		
 		this.showAndWait();
 	}

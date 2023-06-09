@@ -1,5 +1,4 @@
 import java.util.*;
-import java.util.Scanner;
 
 class Solver {
 	private Stack<Branch> branches;
@@ -81,48 +80,33 @@ class Solver {
 
 			if (this.pos.equals(l.getFinish()))
 				return true;
-			//System.out.println("Current pos: " + (char)('A' + pos.y_axis) + "" + (pos.x_axis + 1));
-			//System.out.println("Final pos: " + (char)('A' + l.getFinish().y_axis) + "" + (l.getFinish().x_axis + 1));
-
+			
 			for (int i = 0; i < 4; ++i) {
 				close_path = false;
-				//System.out.println("Position: " + (char)('A' + pos.y_axis) + "" + (pos.x_axis + 1));
 				temp = calculatePos(pos, i);
-				//System.out.println("iteration: " + i + " y:" + (char)('A' + temp.y_axis) + "/x:" + temp.x_axis);
 				if (i == 0 && pos.y_axis <= 0) {
 					close_path = true;
-					//System.out.println("Above is closed");
 				}
 				else if (i == 1 && pos.x_axis >= 5){
 					close_path = true;
-					//System.out.println("Right is closed");
 				}
 				else if (i == 2 && pos.y_axis >= 5){
 					close_path = true;
-					//System.out.println("Below is closed");
 				}
 				else if (i == 3 && pos.x_axis <= 0){
 					close_path = true;
-					//System.out.println("Left is closed");
 				}
 				else if (i == prev) {
 					close_path = true;
-					//System.out.println("Came from" + i);
 				}
 				else if (!directions[i]){
 					close_path = true;
-					//System.out.println("Direction: " + i + " is already closed");
 				}
 				else if (l.isClosed(this.pos, dir[i])) {
 					close_path = true;
-					//System.out.println("Direction: " + i + " is closed");
 				}
 				else if (checkedRooms[temp.y_axis][temp.x_axis]) {
 					close_path = true;
-					//System.out.println("Has already been here");
-				}
-				else {
-					//System.out.println("Direction: " + i + " is open");
 				}
 				
 				if (close_path) {
@@ -131,15 +115,10 @@ class Solver {
 					continue;
 				}
 				openDir = i;
-			
 			}
-
-			//System.out.println("N of open paths: " + openDirN + " | Selected path: " + openDir + '\n');
 			
 			
 			if (openDirN == 0) {
-//				System.out.println("N of open paths: " + branches.peek().openDirN + " | N of Branches: " + branches.size());
-//				System.out.println("Branch Position: " + (char)('A' + branches.peek().pos.y_axis) + "/" + branches.peek().pos.x_axis);
 				if (branches.isEmpty())
 					return false;
 				if (pos.equals(branches.peek().pos)) {
@@ -148,7 +127,6 @@ class Solver {
 				if (branches.isEmpty())
 					return false;
 
-				//pos = branches.peek().pos;
 				pos.copy(branches.peek().pos);
 				openDirN = branches.peek().openDirN;
 				for (int i = 0; i < 4; ++i) {
@@ -170,7 +148,6 @@ class Solver {
 			else if (openDirN > 1) {
 				if (!deja_vu) {
 					branches.push(new Branch());
-					//branches.peek().pos = this.pos;
 					branches.peek().pos.copy(this.pos);
 					for (int i = 0; i < 4; ++i) {
 						branches.peek().directions[i] = directions[i];
