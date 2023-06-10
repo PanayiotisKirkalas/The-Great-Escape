@@ -1,7 +1,6 @@
 import javafx.scene.*;
 import javafx.stage.*;
 import javafx.application.*;
-import javafx.stage.WindowEvent;
 import javafx.beans.property.StringProperty;
 import javafx.beans.property.SimpleStringProperty;
 

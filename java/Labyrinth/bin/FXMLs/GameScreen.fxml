@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.text.Text?>
+
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="421.0" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="455.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+  <items>
+      <AnchorPane prefHeight="27.0" prefWidth="354.0" style="-fx-background-color: #89c241;">
+         <children>
+            <Text fx:id="pName" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="418.0" />
+         </children>
+      </AnchorPane>
+      <GridPane fx:id="map" maxHeight="420.0" maxWidth="420.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="420.0" SplitPane.resizableWithParent="false">
+<!--          <columnConstraints> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" /> -->
+<!--          </columnConstraints> -->
+<!--          <rowConstraints> -->
+<!--             <RowConstraints /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" /> -->
+<!--          </rowConstraints> -->
+      </GridPane>
+  </items>
+</SplitPane>

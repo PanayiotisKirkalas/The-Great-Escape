@@ -1,0 +1,6 @@
+﻿  Mode1.cpp
+C:\Users\Admin\source\repos\UsoguiLabyrinth\UsoguiLabyrinth\Mode1.cpp(14,1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\Admin\source\repos\UsoguiLabyrinth\UsoguiLabyrinth\Mode1.cpp(62,7): warning C4101: 'c2': unreferenced local variable
+C:\Users\Admin\source\repos\UsoguiLabyrinth\UsoguiLabyrinth\Mode1.cpp(100,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Admin\source\repos\UsoguiLabyrinth\UsoguiLabyrinth\Mode1.cpp(88,7): warning C4101: 'c': unreferenced local variable
+  UsoguiLabyrinth.vcxproj -> C:\Users\Admin\source\repos\UsoguiLabyrinth\Debug\UsoguiLabyrinth.exe
