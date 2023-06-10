@@ -1,12 +1,14 @@
-
+/*
+ * Represents the second mode (Battle Royal)
+ */
 import java.util.*;
 
 class Mode2 extends Mode
 {
-	private ArrayList<Mode2Player> Players;
-	private Mode2Player currPlayer;
+	private ArrayList<Mode2Player> Players;//The list of players still playing
+	private Mode2Player currPlayer;//the player that is now their turn
 	private int currPIndex;
-	private ArrayList<Mode2Player> CorpseList;
+	private ArrayList<Mode2Player> CorpseList;//The players that are "dead", they have lost the game
 
 	Mode2() {
 		Players = new ArrayList<Mode2Player>();
@@ -34,7 +36,7 @@ class Mode2 extends Mode
 				"\tRIGHT: D\n"
 				;
 	}
-	private void SetPlayers(int n_Players) {
+	private void SetPlayers(int n_Players) {//initializes the players
 		Players.clear();
 		Players = new ArrayList<Mode2Player>(n_Players);
 		CorpseList = new ArrayList<>();
@@ -44,7 +46,7 @@ class Mode2 extends Mode
 		game = new GameScreen(Players.get(0), this);
 	}
 	
-	void Setup() {
+	private void Setup() {//makes necessary preparations for the game to start
 		int n;
 		
 		do {
@@ -58,11 +60,11 @@ class Mode2 extends Mode
 			Players.get(i).setGameScreen(game);
 			Players.get(i).askName();
 			game.SetPlayer(Players.get(i));
-			Players.get(i).setPos(Players.get(i).getLabyrinth().GenerateLabyrinth());
+			Players.get(i).setPos(Players.get(i).getLabyrinth().GenerateLabyrinth());//randomly generates a labyrinth for each player
 		}
 	}
 	
-	Mode2Player MetSomeone(Mode2Player current) {
+	private Mode2Player MetSomeone(Mode2Player current) {//checks if two players have "met each other", are in the same position
 		for (Mode2Player p : Players) {
 			if (current.getPos().equals(p.getPos()) && current.getID() != p.getID()) {
 				if (!p.dead) return p;
@@ -71,29 +73,28 @@ class Mode2 extends Mode
 		return null;
 	}
 	
-	public void PassToPlayer(char direction) {
+	public void PassToPlayer(char direction) {//informs a Mode2Player instance about an input from the user 
 		coordinate temp = new coordinate(currPlayer.getPos());
 		Mode2Player other;
-		if (currPlayer.Move(direction) != Player.HIT_WALL) {
-			if (!temp.equals(currPlayer.getPos()))
+		if (currPlayer.Move(direction) != Player.HIT_WALL) {//if the player hasn't met a wall
+			if (!temp.equals(currPlayer.getPos()))//if they have moved gives them a point
 				currPlayer.IncPoints(1);
 			
-			if (currPlayer.getPos().equals(currPlayer.getLabyrinth().getFinish()) || Players.size() == 1) {
+			if (currPlayer.getPos().equals(currPlayer.getLabyrinth().getFinish()) || Players.size() == 1) {//if a player finished
 				//winning
 				Main.ShowMessage(game, "Player " + currPlayer.getName() + " won!!!");
 				game.close();
 				return;
 			}
-			if ((other = MetSomeone(currPlayer)) != null) {
-				if (currPlayer.Battle(other) != null) {
-					//Main.ShowMessage(game, "\nNext player's turn");
+			if ((other = MetSomeone(currPlayer)) != null) {//if they met another player
+				if (currPlayer.Battle(other) != null) {//have them bet, if the other player won, its their turn
 					currPIndex = Players.indexOf(other);
 					currPlayer = other;
 					game.SetPlayer(currPlayer);
 				}
 			}
 		}
-		else {
+		else {//they met a wall so its next player's turn
 			Main.ShowMessage(game, "You met a wall\nNext player's turn");
 			do {
 				currPIndex = (currPIndex + 1) % Players.size();
@@ -103,14 +104,14 @@ class Mode2 extends Mode
 		}
 	}
 	
-	public void Play() {
+	public void Play() {//starts the game
 		Setup();
 		game.SetPlayer(Players.get(0));
 		game.WallVisibility(false);
 		game.show();
 		game.EnableMovement();
 	}
-	void ConfirmDeath(Mode2Player corpse) {
+	public void ConfirmDeath(Mode2Player corpse) {//a player calls it if they have lost all lives
 		this.CorpseList.add(corpse);
 		this.Players.remove(corpse);
 	}

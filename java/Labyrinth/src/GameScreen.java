@@ -1,3 +1,7 @@
+/*
+ * Its the window that the labyrinth will be shown through to the user 
+ */
+
 import java.io.IOException;
 import javafx.scene.*;
 import javafx.fxml.*;
@@ -9,7 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 
 public class GameScreen extends Stage {
-	static public final char space = ' ';
+	static public final char space = ' ';//flags for the different states of a location in the labyrinth
 	static public final char unseen = 117;
 	static public final char player = 'O';
 	static public final char h_wall = '=';
@@ -26,12 +30,14 @@ public class GameScreen extends Stage {
 	@FXML private Text pName;
 	private FXMLLoader loader;
 	private Scene scene;
-	private Player myPlayer;
-	private Labyrinth myLabyrinth;
-	private Mode mode;
-	private boolean visibility = true;
+	private Player myPlayer;//the player that is currently their turn
+	private Labyrinth myLabyrinth;//the labyrinth that is currently shown
+	private Mode mode;//through this information about what the player pressed will be passed to the player class
+	private boolean visibility = true;//if the walls will be shown or not
 	
 	private coordinate translate(int y, int x) {
+		//the other classes and this one refer to the same points on the labyrinth with different values
+		//so a function was needed to translate the values from the external set to these of the internal
 		coordinate temp = coordinate.make_pair(y, x);
 		temp.y_axis = (temp.y_axis * 2) + 2;
 		temp.x_axis = (temp.x_axis * 2) + 2;
@@ -40,6 +46,7 @@ public class GameScreen extends Stage {
 	
 	public GameScreen(Player p_player, Mode p_mode) {
 		try {
+			//Connect to the respective .fxml file that describes the appearance of the window
 			loader = new FXMLLoader(getClass().getResource("FXMLs/GameScreen.fxml"));
 	        loader.setController(this);
 	        root = loader.load();
@@ -52,14 +59,14 @@ public class GameScreen extends Stage {
 		myLabyrinth = p_player.getLabyrinth();
 		myPlayer = p_player;
 		
-		this.setOnCloseRequest(event -> {
+		this.setOnCloseRequest(event -> {//Don't close
             event.consume(); // Consume the event to prevent default handling
         });
 		
 		this.setResizable(false);
 	}
 	
-	public void Alter(coordinate pos, char state) {
+	public void Alter(coordinate pos, char state) {//load image on given position depending on given state
 		Image image;
 		switch (state) {
 		case prev:
@@ -97,7 +104,7 @@ public class GameScreen extends Stage {
 		map.add(imageView, temp.x_axis, temp.y_axis);
 	}
 	
-	public void Update() {
+	public void Update() {//change from one labyrinth to the other
 		for (int i = 0; i < 14; ++i) {
 			for (int j = 0; j < 14; ++j) {
 				Alter(coordinate.make_pair(i, j), myLabyrinth.ingameAt(coordinate.make_pair(i, j)));
@@ -105,7 +112,7 @@ public class GameScreen extends Stage {
 		}
 	}
 	
-	public void WallVisibility(boolean on) {
+	public void WallVisibility(boolean on) {//to show or not show the walls
 		visibility = on;
 		for (int i = 2; i < 14; ++i) {
 			for (int j = 2; j < 14; ++j) {
@@ -121,20 +128,20 @@ public class GameScreen extends Stage {
 		}
 	}
 	
-	public void SetPlayer(Player p_player) {
+	public void SetPlayer(Player p_player) {//sets who is currently playing
 		myPlayer = p_player;
 		pName.setText(myPlayer.getName());
 		SetLabyrinth(myPlayer.getLabyrinth());
 	}
 	
-	public void SetLabyrinth(Labyrinth l) {
+	public void SetLabyrinth(Labyrinth l) {//sets the labyrinth currently shown
 		myLabyrinth = l;
 		
 		Update();
 		WallVisibility(visibility);
 	}
 	
-	public void EnableMovement() {
+	public void EnableMovement() {//allows the players to move in the labyrinth
 		scene.setOnKeyPressed(event -> {
 			
 			switch (event.getCode()) {
@@ -156,11 +163,7 @@ public class GameScreen extends Stage {
 		});
 	}
 	
-	public void DisableMovement() {
+	public void DisableMovement() {//Forbids the players to move in the labyrinth
 		scene.setOnKeyPressed(null);
-	}
-	
-	public void Finish() {
-		this.close();
 	}
 }

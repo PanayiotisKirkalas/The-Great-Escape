@@ -1,4 +1,6 @@
-
+/*
+ * Its a type made of to integers that is used as the position of the a point in the labyrinth
+ */
 public class coordinate {
 	int y_axis, x_axis;
 	

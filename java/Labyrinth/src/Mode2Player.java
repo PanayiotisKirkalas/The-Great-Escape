@@ -1,3 +1,6 @@
+/*
+ * Represents the players for the second mode (Battle Royal). 
+ */
 class Mode2Player extends Player {
 	protected static final int PLAYER_LIVES = 2;
 	
@@ -5,7 +8,7 @@ class Mode2Player extends Player {
 	int points = 0, lives = PLAYER_LIVES;
 	Mode2 m2;
 	
-	public Mode2Player Battle(Mode2Player p) {
+	public Mode2Player Battle(Mode2Player p) {//If two players find them selves in the same position they put to a betting of points
 		int bet1, bet2;
 
 		bet1 = Bet(this);
@@ -17,7 +20,7 @@ class Mode2Player extends Player {
 		case 0:
 			// draw
 			Main.ShowMessage(game, "Draw!!!\n" + p.getName() + "'s turn");
-	 		return p;
+	 		return p;//its the other player's turn
 		default:
 			String msg = new String();
 			switch (Integer.compare(bet1, bet2))
@@ -43,10 +46,10 @@ class Mode2Player extends Player {
 				msg += p.Name + "'s turn\n";
 				Main.ShowMessage(game, msg);
 				return p;
-			}
+			}//its now the winner's turn
 		}
 	}
-	int Bet(Mode2Player p) {
+	int Bet(Mode2Player p) {//Ask a given player how many points they will bet
 		int bet = 0, points = p.getPoints();
 		
 		bet = Integer.parseInt(Main.AskUser(game, "Your points: " + points + "\nHow many points will you bet?: "));
@@ -54,7 +57,7 @@ class Mode2Player extends Player {
 			Main.ShowMessage(game, "INVALID ANSWER, CAN'T BET MORE POINTS THAN YOU HAVE");
 			bet = Integer.parseInt(Main.AskUser(game, "Your points: " + points + "How many points you will bet?: "));
 		}
-		p.DecPoints(bet);
+		p.DecPoints(bet);//the player loses the points used
 		return bet;
 	}
 	public Mode2Player() {
@@ -80,7 +83,7 @@ class Mode2Player extends Player {
 	public void DecPoints(int value) {
 		this.points -= value;
 	}
-	public int LoseLife() {
+	public int LoseLife() {//if the player lost a bet, they lose one life (they start with 2) and if they reach 0 lives are marked as dead
 		--(this.lives);
 		if (this.dead = (this.lives <= 0)) {
 			m2.ConfirmDeath(this);

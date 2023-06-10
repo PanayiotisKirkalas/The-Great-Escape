@@ -1,7 +1,8 @@
-import java.util.*;
+/*
+ * Is the super class for Mode1Player and Mode2Player. It contains common attributes and methods
+ */
 
 public class Player {
-	public static Scanner keyboard = new Scanner(System.in).useDelimiter("\\\n");
 	protected static final char PLAYER_SYM = 'O';
 	protected static final char _VWALL_ = '|';
 	protected static final char _HWALL_ = '=';
@@ -30,13 +31,13 @@ public class Player {
 		this.pos = new coordinate();
 	}
 
-	public int Move(char direction)
+	public int Move(char direction)//Moves to a given direction. Is called by the Mode.PassToPlayer method
 	{
 		coordinate temp = new coordinate(this.pos);
 		
-		if(!Own.isClosed(this.pos, direction))
+		if(!Own.isClosed(this.pos, direction))//If there is no wall to that direction
 		{
-			switch (direction)
+			switch (direction)//Move
 			{
 				case KEY_UP:
 					if (this.pos.y_axis > 0) {
@@ -60,20 +61,20 @@ public class Player {
 					break;
 			}
 			
-			Own.alter(temp, GameScreen.prev);
-			Own.alter(this.pos, this.symbol);
+			Own.alter(temp, GameScreen.prev);//Sets its previous position as previous in the labyrinth
+			Own.alter(this.pos, this.symbol);//Sets its current position in the labyrinth
 			return 0;
 		}
-		return HIT_WALL;
+		return HIT_WALL;//If there was a wall it returns a specific value to let the mode know
 	}
 	
-	public void askName()
+	public void askName()//Asks the user the name they want to have in the game
 	{
 		this.Name = Main.AskUser(game, "Username: ");
 		this.Own.SetPlayer(this);
 	}
 	
-	public String getName()
+	public String getName()//return the name of the player
 	{
 		return new String(this.Name);
 	}
@@ -83,32 +84,32 @@ public class Player {
 		return this.symbol;
 	}
 	
-	public coordinate getPos()
+	public coordinate getPos()//returns the position of the player
 	{
 		return new coordinate(this.pos);
 	}
 	
-	public int getID()
+	public int getID()//returns the id of the player
 	{
 		return this.id;
 	}
 	
-	public void setPos(coordinate p)
+	public void setPos(coordinate p)//sets the position of the player
 	{
 		this.pos.copy(p);
 	}
 	
-	public void setGameScreen(GameScreen p_game) {
+	public void setGameScreen(GameScreen p_game) {//sets the game window the player will work with
 		this.game = p_game;
 		this.Own.setGameScreen(p_game);
 	}
 	
-	public Labyrinth getLabyrinth()
+	public Labyrinth getLabyrinth()//returns the labyrinth of the player
 	{
 		return this.Own;
 	}
 	
-	public void setLabyrinth(Labyrinth l) {
+	public void setLabyrinth(Labyrinth l) {//sets the labyrinth of the player
 		this.Own = l;
 	}
 }

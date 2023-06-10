@@ -5,7 +5,7 @@ public class Mode1Player extends Player {
 		super(id, game);
 	}
 	
-	public void Ask()
+	public void Ask()//asks the user if they want to build their labyrinth or receive a made one 
 	{
 		String input;
 		
@@ -32,7 +32,7 @@ public class Mode1Player extends Player {
 		}
 	}
 	
-	public void BuildLabyrinth()
+	public void BuildLabyrinth()//allows the user to build their labyrinth
 	{
 		int dir;
 		char[] RowColumn = {' ', ' '};
@@ -42,6 +42,7 @@ public class Mode1Player extends Player {
 		Main.ShowMessage(game, "Build your labyrinth");
 		game.Update();
 		game.show();
+		//Asks for starting and finishing points
 		while ((RowColumn[0] < 97 || RowColumn[0] > 102)
 				|| (RowColumn[1] < 49 || RowColumn[1] > 54))
 		{
@@ -62,6 +63,7 @@ public class Mode1Player extends Player {
 		
 		
 		RowColumn[0] = RowColumn[1] = ' ';
+		//lets the user add up to 20 walls by asking the position of the block the wall will be added and the direction
 		Main.ShowMessage(game, "Add walls (Enter -1 to stop building):");
 		for (int i = 1; i <= 20 && (RowColumn[0] != 45 && RowColumn[1] != 49); i++)
 		{

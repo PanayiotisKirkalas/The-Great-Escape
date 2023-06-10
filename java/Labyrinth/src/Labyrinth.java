@@ -1,30 +1,38 @@
+/*
+ * It represents the labyrinth. Each Player object contains one. 
+ * It also allows for other classes to alter a labyrinth by providing appropriate methods
+ */
+
 import java.util.*;
 
 class Labyrinth
 {
-	public static boolean show_walls = false, inner = false;
-	private int n_walls;
-	private coordinate start, finish;
-	private Player player;
-	private GameScreen game;
-	private ArrayList<ArrayList<Character>> map;
+	public static boolean inner = false; //flag for when one of its own methods calls the Alter
+	private int n_walls;				 //number of walls
+	private coordinate start, finish;	 //starting and finishing point
+	private Player player;				 //the player that is either making the labyrinth or going to solve it
+	private GameScreen game;			 //the window that will show the labyrinth to the player
+	private ArrayList<ArrayList<Character>> map; //a matrix that internally represents the labyrinth
 
-	private coordinate translate(coordinate c) {
+	private coordinate translate(coordinate c) { 
+		//the other classes and this one refer to the same points on the labyrinth with different values
+		//so a function was needed to translate the values from the external set to these of the internal
 		coordinate temp = new coordinate(c);
 		temp.y_axis = (temp.y_axis * 2) + 2;
 		temp.x_axis = (temp.x_axis * 2) + 2;
 		return temp;
 	}
 	
-public Labyrinth(GameScreen p_game) {
+	public Labyrinth(GameScreen p_game) { //it sets the labyrinth on its initial state with only the very basic walls
 		this.game = p_game;
 		n_walls = 0;
 		map = new ArrayList<ArrayList<Character>>();
 		start = new coordinate();
 		finish = new coordinate();
 		char side = 'A', column = '1';
-		ArrayList<Character> row = new ArrayList<Character>();
+		ArrayList<Character> row = new ArrayList<Character>(); //it first readies a row and then add it to actual labyrinth
 
+		//the first row that contains the numbers above is added
 		row.add(' ');
 		row.add('|');
 		for (int i = 0; i < 6; ++i) {
@@ -35,6 +43,7 @@ public Labyrinth(GameScreen p_game) {
 		map.add(new ArrayList<Character>(row));
 		row.clear();
 
+		//the second row that contains the upper walls to separate the top row from the labyrinth is added
 		row.add('=');
 		row.add('+');
 		for (int i = 0; i < (6 * 2); ++i) {
@@ -43,9 +52,10 @@ public Labyrinth(GameScreen p_game) {
 		map.add(new ArrayList<Character>(row));
 		row.clear();
 
+		//the rest of the rows are made and added
 		for (int i = 0; i < (6 * 2); ++i) {
 			if (i % 2 == 0) {
-				row.add(side);
+				row.add(side); //it adds the letter on the far left of some rows
 				++side;
 				row.add('|');
 				for (int k = 0; k < 6; ++k) {
@@ -66,16 +76,19 @@ public Labyrinth(GameScreen p_game) {
 		}
 	}
 
-	char at(coordinate pos) {
+	public char at(coordinate pos) { //return the character representing the sate of a point in the labyrinth
 		coordinate temp = (translate(pos));
 		return map.get(temp.y_axis).get(temp.x_axis);
 	}
 	
-	char ingameAt(coordinate pos) {
+	public char ingameAt(coordinate pos) { 
+		//return the character representing the sate of a point in the labyrinth for when an internal method needs it
+		//so no value translation is needed
 		return map.get(pos.y_axis).get(pos.x_axis);
 	}
 	
-	void alter(coordinate pos, char c) {
+	public void alter(coordinate pos, char c) { //changes the state of a point in labyrinth
+		//translates the position values given if the call isn't made from an internal method
 		coordinate temp = (inner) ? (pos) : translate(pos);
 		map.get(temp.y_axis).set(temp.x_axis, c);
 		temp = (!inner) ? translate(pos) : temp;
@@ -84,7 +97,7 @@ public Labyrinth(GameScreen p_game) {
 		return;
 	}
 	
-	boolean BuildWall(coordinate pos, int dir) {
+	public boolean BuildWall(coordinate pos, int dir) {//it adds a wall given a position and a direction
 		coordinate temp = (translate(pos));
 		
 		switch (dir) {
@@ -117,7 +130,7 @@ public Labyrinth(GameScreen p_game) {
 		return true;
 	}
 	
-	boolean EraseWall(coordinate pos, int dir) {
+	public boolean EraseWall(coordinate pos, int dir) {//it removes a wall given a position and a direction
 		coordinate temp = (translate(pos));
 
 		switch (dir) {
@@ -143,7 +156,8 @@ public Labyrinth(GameScreen p_game) {
 		alter(temp, ' ');
 		return true;
 	}
-	boolean isClosed(coordinate pos, char dir) {
+	public boolean isClosed(coordinate pos, char dir) {
+		//tells the caller class if there is wall somewhere given a position and a direction
 		coordinate temp = translate(pos);
 		switch (dir) {
 		case 'w'://Up
@@ -158,19 +172,19 @@ public Labyrinth(GameScreen p_game) {
 			return false;
 		}
 	}
-	coordinate getStart() {
+	public coordinate getStart() {//returns staring point
 		coordinate c = new coordinate(this.start);
 		c.y_axis = (c.y_axis / 2) - 1;
 		c.x_axis = (c.x_axis / 2) - 1;
 		return c;
 	}
-	coordinate getFinish() {
+	public coordinate getFinish() {//returns finishing point
 		coordinate c = new coordinate(this.finish);
 		c.y_axis = (c.y_axis / 2) - 1;
 		c.x_axis = (c.x_axis / 2) - 1;
 		return c;
 	}
-	void SetupLabyrinth() {
+	void SetupLabyrinth() {//makes basic needed preparations for the labyrinth to be randomly generated
 		Random t = new Random();
 		coordinate start = new coordinate(), finish = new coordinate();
 
@@ -196,7 +210,7 @@ public Labyrinth(GameScreen p_game) {
 		this.setStart(start);
 		this.setFinish(finish);
 	}
-	coordinate GenerateLabyrinth() {
+	public coordinate GenerateLabyrinth() {//randomly generates a labyrinth
 		int dir;
 		coordinate pos = new coordinate(), temp = new coordinate();
 		Grid grid = new Grid();
@@ -238,32 +252,32 @@ public Labyrinth(GameScreen p_game) {
 
 		return this.getStart();
 	}
-	void setStart(coordinate pos) {
+	public void setStart(coordinate pos) {//sets starting point
 		this.start.copy(translate(pos));
 		inner = false;
 		this.alter(pos, 'S');
 	}
-	void setFinish(coordinate pos) {
+	public void setFinish(coordinate pos) {//sets finishing point
 		this.finish.copy(translate(pos));
 		inner = false;
 		this.alter(pos, 'f');
 	}
-	void AddDelWall(int condition) {
+	private void AddDelWall(int condition) {//increases or decreases the recorded number of walls
 		this.n_walls += condition;
 	}
-	int getNofWalls() {
+	public int getNofWalls() {//returns the number of walls
 		return this.n_walls;
 	}
 	
-	public void setGameScreen(GameScreen p_game) {
+	public void setGameScreen(GameScreen p_game) {//sets the window that the labyrinth will be shown
 		this.game = p_game;
 	}
 	
-	public void SetPlayer(Player p_player) {
+	public void SetPlayer(Player p_player) {//sets the player that is either making the labyrinth or going to solve it
 		player = p_player;
 	}
 	
-	public Player getPlayer() {
+	public Player getPlayer() {//returns the player that is either making the labyrinth or going to solve it
 		return player;
 	}
 };

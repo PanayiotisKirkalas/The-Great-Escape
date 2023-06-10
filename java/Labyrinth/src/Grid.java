@@ -1,3 +1,7 @@
+/*
+ * it represents a smaller version of the labyrinth and is used to randomly generate one by the Mode1Playr class
+ */
+
 import java.util.LinkedList;
 import java.util.*;
 
@@ -18,6 +22,8 @@ class Grid {
 		}
 	}
 	int Open(coordinate pos) {
+		//it flags a location on the labyrinth as open, and its neighboring locations as "to be opened"
+		//opening to neighboring locations removes the wall between them
 		rooms[pos.y_axis][pos.x_axis].open = true;
 		rooms[pos.y_axis][pos.x_axis].closed = false;
 		rooms[pos.y_axis][pos.x_axis].frontier = false;

@@ -19,6 +19,7 @@ public class QuestionScreen extends Stage{
 		this.initOwner(primaryStage);
 		
 		try {
+			//Connect to the respective .fxml file that describes the appearance of the window
 			loader = new FXMLLoader(getClass().getResource("FXMLs/QuestionScreen.fxml"));
 	        loader.setController(this);
 	        root = loader.load();
