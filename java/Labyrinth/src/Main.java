@@ -1,5 +1,9 @@
 /*
  * The .jar file doesn't run. We couldn't figure out why
+ * 
+ * To build the javafx library, in Run Configurations add the VM argument: 
+ * --module-path "C:\Path\To\Where\Javafx\Is\Stored\lib" --add-modules javafx.controls,javafx.fxml
+ * 
  * This is the main class of the project. It calls the MainMenuScreen class and sets the functionalities of it's buttons
  * It also provides 2 methods to allow the other classes inform and ask the user about something through the 
  * MessageScreen and QuestionScreen classes
